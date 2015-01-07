@@ -7,29 +7,8 @@ import java.sql.ResultSet;
 
 import org.owasp.esapi.ESAPI;
 
-/**
- * This utility will convert a database data into JSON format.
- * Note:  this java class requires the ESAPI 1.4.4 jar file
- * ESAPI is used to encode data
- * 
- * @author 308tube
- */
 public class ToJSON {
 
-	/**
-	 * This will convert database records into a JSON Array
-	 * Simply pass in a ResultSet from a database connection and it
-	 * loop return a JSON array.
-	 * 
-	 * It important to check to make sure that all DataType that are
-	 * being used is properly encoding.
-	 * 
-	 * varchar is currently the only dataType that is being encode by ESAPI
-	 * 
-	 * @param rs - database ResultSet
-	 * @return - JSON array
-	 * @throws Exception
-	 */
 	public JSONArray toJSONArray(ResultSet rs) throws Exception {
 
         JSONArray json = new JSONArray(); //JSON array that will be returned
@@ -37,7 +16,7 @@ public class ToJSON {
 
         try {
 
-        	 //we will need the column names, this will save the table meta-data like column nmae.
+        	 //we will need the column names, this will save the table meta-data like column name.
              java.sql.ResultSetMetaData rsmd = rs.getMetaData();
 
              //loop through the ResultSet
