@@ -52,6 +52,7 @@ public class ToJSON {
                  for (int i=1; i<numColumns+1; i++) {
 
                      String column_name = rsmd.getColumnName(i);
+                     System.out.println(rsmd.getColumnTypeName(i));
 
                      if(rsmd.getColumnType(i)==java.sql.Types.ARRAY){
                     	 obj.put(column_name, rs.getArray(column_name));
