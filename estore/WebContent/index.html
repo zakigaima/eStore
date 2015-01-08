@@ -1,10 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="ISO-8859-1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>New User</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+	<script src="js/jquery-min.js"></script>
+	<script src="js/inventory.js"></script>
+	<script src="js/polyfill.js"></script>
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
+	<div class="header">
+		<div class="container">
+			<div class="site-logo">
+				<h2><a href="#">eStore</a></h2>
+			</div>
+		</div>
+	</div>
 
+	<div class="container">
+		<div class="col-md-3">
+			<h3>Items in eStore</h3>
+			<div id="get_inventory" ></div>
+		</div>
+		<div class="col-md-9">
+			<h3 id="item_name"></h3>
+			<div id="item_desc" ></div>
+			<div id="item_price" ></div>
+			<form id="buy_item" name="buy_item" action="#">
+				<input type="hidden" id="item_id" name="item_id" value="" />
+			</form>
+		</div>
+	</div>
+	<div id="update_response" class="container"></div>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

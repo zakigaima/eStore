@@ -12,7 +12,7 @@
 
 
 	<script src="js/jquery-min.js"></script>
-	<script src="js/newitem.js"></script>
+	<script src="js/newuser.js"></script>
 	<script src="js/polyfill.js"></script>
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -27,26 +27,26 @@
 
 	<div class="container">
 		<div class="col-md-6">
-			<h3>New Item</h3>
-			<form id="add_item" name="add_item" action="#">
+			<h3>New User</h3>
+			<form id="add_user" name="add_user" action="#">
 				<div class="form-group">
 					<br/>
-					<label>Item Name</label>
-					<input type="text" name="item_name" id="item_name" maxlength="50" class="form-control" />
+					<label>Username</label>
+					<input type="text" name="username" id="username" maxlength="50" class="form-control" />
 					<br/>
-					<label>Item Description</label>
-					<textarea name="item_desc" id="item_desc" class="form-control" ></textarea>
+					<label>Password</label>
+					<input type="password" name="password" id="password" maxlength="10" class="form-control" />
 					<br/>
-					<label>Price</label>
-					<input type="text" name="item_price" id="item_price" maxlength="10" class="form-control" />
+					<label>Email Address</label>
+					<input type="email" name="email" id="email" maxlength="50" class="form-control" />
 					<br/>
 					<input type="button" name="submit_it" id="submit_it" value="Submit" class="form-control btn btn-primary"> 
 				</div>
 			</form>
 		</div>
 		<br />
+		<div id="div_ajaxResponse"></div>
 	</div>
-	<div id="div_ajaxResponse" class="container"></div>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>

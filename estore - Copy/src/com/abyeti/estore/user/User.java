@@ -122,7 +122,7 @@ public class User {
 				 * The second parameter is the Value
 				 */
 				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Login Successful");
+				jsonObject.put("MSG", "Item has been entered successfully, Version 3");
 				/*
 				 * When you are dealing with JSONArrays, the put method is used to add
 				 * JSONObjects into JSONArray.
