@@ -3,7 +3,7 @@ package com.abyeti.estore.status;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-import com.abyeti.estore.db.PGDBConn;
+import com.abyeti.db.PGDBConn;
 
 import java.sql.*;
 @Path("/v1/status")
