@@ -18,7 +18,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.abyeti.estore.db.*;
+import com.abyeti.db.*;
 import com.abyeti.util.ToJSON;
 
 @Path("/v3/inventory")

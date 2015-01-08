@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 
-import com.abyeti.estore.db.*;
+import com.abyeti.db.*;
 import com.abyeti.util.ToJSON;
 
 @Path("/v2/inventory")
