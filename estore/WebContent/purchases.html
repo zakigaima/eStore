@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Login to eStore</title>
+	<title>My Purchases</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
 
 	<script src="js/jquery-min.js"></script>
-	<script src="js/login.js"></script>
+	<script src="js/purchases.js"></script>
 	<script src="js/polyfill.js"></script>
     <link href="css/style.css" rel="stylesheet">
 	<script src="js/angular.min.js" type="text/javascript"></script>
@@ -25,24 +25,10 @@
 
 	<div class="container">
 		<div class="col-md-6">
-			<h3>Login</h3>
-			<h4 id="loggedInMsg"></h4>
-			<form id="login" name="login" action="#">
-				<div class="form-group">
-					<br/>
-					<label>Username</label>
-					<input type="text" name="username" id="username" maxlength="50" class="form-control" />
-					<br/>
-					<label>Password</label>
-					<input type="password" name="password" id="password" maxlength="10" class="form-control" />
-					<br/>
-					<input type="button" name="submit_it" id="submit_it" value="Submit" class="form-control btn btn-primary"> 
-				</div>
-			</form>
+			<h3>My Purchases</h3>
+			<div id="get_purchases" ></div>
 		</div>
-		<br />
 	</div>
-	<div id="div_ajaxResponse" class="container"></div>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>

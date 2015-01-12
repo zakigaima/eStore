@@ -26,7 +26,7 @@ $(document).ready(function() {
 		$('#item_price').text(itemprice);
 		
 		$('#update_response').text("");
-		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' />");
+		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' value='Buy Now' class='btn btn-primary'/>");
 	});
 	
 	$inventory.submit(function(e) {

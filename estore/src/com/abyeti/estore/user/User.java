@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,7 +26,44 @@ import com.abyeti.db.*;
 @Path("/user")
 public class User {
 
+
 	@Context private HttpServletRequest request;
+	
+	public boolean isLoggedIn() {
+		HttpSession session = request.getSession();
+		if(session.getAttribute("estore_username")==null) 
+			return false;
+		return true;
+			
+	}
+	
+	@Path("/confirmLogin")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response isLoggenIn() throws Exception {
+		HttpSession session = request.getSession();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		String returnString;
+		if(!isLoggedIn()) {
+			jsonObject.put("CODE", "500");
+			jsonObject.put("MSG", "You are not logged in, <a href='login.html'>Login</a>");
+			returnString = jsonArray.put(jsonObject).toString();
+			return Response.ok(returnString).build();
+		}
+		jsonObject.put("CODE", "200");
+		jsonObject.put("MSG", "Welcome,  "+session.getAttribute("estore_username"));
+		returnString = jsonArray.put(jsonObject).toString();
+		return Response.ok(returnString).build();
+	}
+	
+	@Path("/logout")
+	@GET
+	public void LogOut() throws Exception {
+		HttpSession session = request.getSession();
+		session.invalidate();
+	}
+	
 	@Path("/login")
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
@@ -61,7 +99,7 @@ public class User {
 				 * The second parameter is the Value
 				 */
 				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Item has been entered successfully, Version 3");
+				jsonObject.put("MSG", "Login Successful");
 				/*
 				 * When you are dealing with JSONArrays, the put method is used to add
 				 * JSONObjects into JSONArray.

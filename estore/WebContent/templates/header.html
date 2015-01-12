@@ -1,0 +1,21 @@
+	<div class="header">
+		<div class="container">
+			<div class="col-md-2 site-logo">
+				<h2><a href="index.html">eStore</a></h2>
+			</div>
+			<div class="col-md-6"></div>
+			<div class="col-md-4">
+				<div id="loginstatus" class="loginstatus"></div>
+			</div>		</div>
+	</div>
+	<div class="container">
+		<ul class="nav nav-tabs nav-pills" ng-init="navtabs=[	{link:'login.html',value:'Login'},
+								{link:'newuser.html',value:'New User'},
+								{link:'newitem.html',value:'New Item'},
+								{link:'sales.html',value:'My Sales'},
+								{link:'purchases.html',value:'My Purchases'},
+								{class:'logout',link:'#',value:'Logout'}
+							]">
+			<li ng-repeat="x in navtabs" role="presentation"><a href="{{x.link}}" id="{{x.class}}">{{x.value}}</a></li>
+		</ul>		
+	</div>
