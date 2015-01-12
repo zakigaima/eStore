@@ -1,51 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="ISO-8859-1">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>New User</title>
-
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-
-	<script src="js/jquery-min.js"></script>
-	<script src="js/login.js"></script>
-	<script src="js/polyfill.js"></script>
-    <link href="css/style.css" rel="stylesheet">
-</head>
-<body>
-	<div class="header">
-		<div class="container">
-			<div class="site-logo">
-				<h2><a href="#">eStore</a></h2>
+	<div class="col-md-6">
+		<h3>Login</h3>
+		<form id="login" name="login" action="#">
+			<div class="form-group">
+				<br/>
+				<label>Username</label>
+				<input type="text" name="login_username" id="login_username" maxlength="50" class="form-control" />
+				<br/>
+				<label>Password</label>
+				<input type="password" name="login_password" id="login_password" maxlength="10" class="form-control" />
+				<br/>
+				<input type="button" name="login_submit_it" id="login_submit_it" value="Submit" class="form-control btn btn-primary"> 
 			</div>
-		</div>
+		</form>
 	</div>
-
-	<div class="container">
-		<div class="col-md-6">
-			<h3>Login</h3>
-			<form id="login" name="login" action="#">
-				<div class="form-group">
-					<br/>
-					<label>Username</label>
-					<input type="text" name="username" id="username" maxlength="50" class="form-control" />
-					<br/>
-					<label>Password</label>
-					<input type="password" name="password" id="password" maxlength="10" class="form-control" />
-					<br/>
-					<input type="button" name="submit_it" id="submit_it" value="Submit" class="form-control btn btn-primary"> 
-				</div>
-			</form>
-		</div>
-		<br />
-	</div>
-	<div id="div_ajaxResponse" class="container"></div>
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-</body>
-</html>
+	<br />
+	<div id="login_div_ajaxResponse" class="container"></div>

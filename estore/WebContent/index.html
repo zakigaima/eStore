@@ -1,47 +1,84 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-	<meta charset="ISO-8859-1">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>New User</title>
-
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-
+	<meta charset="ISO-8859-1" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>eStore</title>
+	
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
+	
+	
 	<script src="js/jquery-min.js"></script>
-	<script src="js/inventory.js"></script>
+	<script src="js/script.js"></script>
+	<!-- <script src="js/inventory.js"></script>
+	<script src="js/newitem.js"></script>
+	<script src="js/newuser.js"></script> -->
 	<script src="js/polyfill.js"></script>
-    <link href="css/style.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet" />
+	<!-- AngularJS Script -->
+	<script src="js/angular.js"></script>
+	<script src="js/angular-route.js"></script>
 </head>
-<body>
+<body ng-app="demoApp">
 	<div class="header">
 		<div class="container">
-			<div class="site-logo">
-				<h2><a href="#">eStore</a></h2>
+			<div class="row">
+				<div class="site-logo col-md-2">
+					<h2><a href="index.html">eStore</a></h2>
+				</div>
+				<div class="col-md-6"></div>
+				<div class="col-md-4">
+					<div id="loginstatus"></div>
+				</div>
 			</div>
-		</div>
+		</div>	
 	</div>
-
 	<div class="container">
-		<div class="col-md-3">
-			<h3>Items in eStore</h3>
-			<div id="get_inventory" ></div>
-		</div>
-		<div class="col-md-9">
-			<h3 id="item_name"></h3>
-			<div id="item_desc" ></div>
-			<div id="item_price" ></div>
-			<form id="buy_item" name="buy_item" action="#">
-				<input type="hidden" id="item_id" name="item_id" value="" />
-			</form>
-		</div>
+		<ul class="nav nav-tabs nav-pills" ng-init="navtabs=[	{link:'#/login',value:'Login'},
+								{link:'#/newuser',value:'New User'},
+								{link:'#/newitem',value:'New Item'}
+							]">
+			<li ng-repeat="x in navtabs" role="presentation"><a href="{{x.link}}">{{x.value}}</a></li>
+		</ul>
 	</div>
-	<div id="update_response" class="container"></div>
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+	<div class="container">
+		 <ng-view></ng-view>
+	</div>
+	<script type="text/javascript">
+	</script>
+	<script type="text/javascript">
+		var demoApp = angular.module('demoApp',['ngRoute']);
+		
+		
+		demoApp.config(['$routeProvider', function ($routeProvider) {
+			$routeProvider
+			.when('/',
+					{
+						templateUrl: 'inventory.html',
+						controller: 'AppCtrl'
+					})
+			.when('/login',
+					{
+						templateUrl: 'login.html',
+						controller: 'AppCtrl'
+					})
+			.when('/newuser',
+					{
+						templateUrl: 'newuser.html',
+						controller: 'AppCtrl'
+					})
+			.when('/newitem',
+					{
+						templateUrl: 'newitem.html',
+						controller: 'AppCtrl'
+					})
+			.otherwise({redirectTo: 'inventory.html'});
+		}]);
+		demoApp.controller('AppCtrl', function() {
+			console.log("Checking in console");
+		});
+	</script>
 </body>
 </html>

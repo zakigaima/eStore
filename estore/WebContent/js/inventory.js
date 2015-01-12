@@ -23,52 +23,22 @@ $(document).ready(function() {
 		
 		$('#item_name').text(itemname);
 		$('#item_desc').text(itemdesc);
-		$('#item_price').text(itemprice);
+		$('#item_price').text("Rs. " + itemprice + "/-");
 		
 		$('#update_response').text("");
-		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' />");
+		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' value='Buy Now' class='btn btn-primary' id='submit_it' />");
 	});
 	
 	$inventory.submit(function(e) {
-		e.preventDefault(); //cancel form submit
-		
-		var obj = $inventory.serializeObject(),
-			itemid = $('#item_id').val();
-		
-		buyItem(obj,itemid);
+		if(confirm("Confirm Purchase!! ")) {
+			e.preventDefault(); //cancel form submit
+			
+			var obj = $inventory.serializeObject(),
+				itemid = $('#item_id').val();
+			
+			buyItem(obj,itemid);
+		}
 	});
-/*	$('#submit_it').click(function(e) {
-		//console.log("submit button has been clicked");
-		e.preventDefault(); //cancel form submit
-		
-		var jsObj = $post_example.serializeObject()
-			, ajaxObj = {};
-		
-		//console.log(jsObj);
-		
-		ajaxObj = {  
-			type: "POST",
-			url: "http://localhost:8080/estore/api/purchase", 
-			data: JSON.stringify(jsObj), 
-			contentType:"application/json",
-			error: function(jqXHR, textStatus, errorThrown) {
-				console.log("Error " + jqXHR.getAllResponseHeaders() + " " + errorThrown);
-				$('#div_ajaxResponse').text( "Error" );
-			},
-			success: function(data) { 
-				//console.log(data);
-				if(data[0].HTTP_CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
-				}
-			},
-			complete: function(XMLHttpRequest) {
-				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-			}, 
-			dataType: "json" //request JSON
-		};
-		
-		$.ajax(ajaxObj);
-	}); */
 });
 
 
@@ -120,7 +90,7 @@ function getInventory() {
 				});
 				
 				$('#get_inventory').html("<table class='table table-striped table-bordered'>" +
-										"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
+										"<tbody><tr><th>Item</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );
@@ -134,9 +104,9 @@ function getInventory() {
 function templateGetInventory(param) {
 	return '<tr>' +
 				'<td class="itemname">' + param.itemname + '</td>' +
-				'<td class="itemdesc">' + param.itemdesc + '</td>' +
+				'<td class="itemdesc" style="display:none">' + param.itemdesc + '</td>' +
 				'<td class="itemprice">' + param.itemprice + '</td>' +
-				'<td><button class="viewItem" value="' + param.itemid + '" type="button">View</button></td>'+
+				'<td><button class="viewItem btn btn-default" value="' + param.itemid + '" type="button">View</button></td>'+
 			'</tr>';
 }
 

@@ -8,7 +8,7 @@ $(document).ready(function() {
 	 * It will do the same thing as Submit above but the api
 	 * will process it in a different way.
 	 */
-	$('#submit_it').click(function(e) {
+	$('#signup_submit_it').click(function(e) {
 		//console.log("submit button has been clicked");
 		e.preventDefault(); //cancel form submit
 		
@@ -28,7 +28,7 @@ $(document).ready(function() {
 			success: function(data) { 
 				//console.log(data);
 				if(data[0].HTTP_CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
+					$('#signup_div_ajaxResponse').text( data[0].MSG );
 				}
 			},
 			complete: function(XMLHttpRequest) {

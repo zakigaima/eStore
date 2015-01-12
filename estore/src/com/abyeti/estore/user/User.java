@@ -26,6 +26,22 @@ import com.abyeti.db.*;
 public class User {
 
 	@Context private HttpServletRequest request;
+	@Path("/confirmLogin")
+	@POST
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response isLoggenIn() throws Exception {
+		HttpSession session = request.getSession();
+		if(session.getAttribute("estore_username")==null) {
+			System.out.println("Not Logged In");
+			//return Response.status(500).entity("Login Required").build();
+			return Response.ok("You are not logged in").build();
+		}
+		return Response.ok("You are logged in").build();
+	}
+	
+	
+	
 	@Path("/login")
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
@@ -61,7 +77,7 @@ public class User {
 				 * The second parameter is the Value
 				 */
 				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Item has been entered successfully, Version 3");
+				jsonObject.put("MSG", "Login Successful");
 				/*
 				 * When you are dealing with JSONArrays, the put method is used to add
 				 * JSONObjects into JSONArray.
@@ -122,7 +138,7 @@ public class User {
 				 * The second parameter is the Value
 				 */
 				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Login Successful");
+				jsonObject.put("MSG", "New User Added");
 				/*
 				 * When you are dealing with JSONArrays, the put method is used to add
 				 * JSONObjects into JSONArray.

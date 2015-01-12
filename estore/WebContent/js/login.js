@@ -8,8 +8,8 @@ $(document).ready(function() {
 	 * It will do the same thing as Submit above but the api
 	 * will process it in a different way.
 	 */
-	$('#submit_it').click(function(e) {
-		//console.log("submit button has been clicked");
+	$('#login_submit_it').click(function(e) {
+		console.log("submit button has been clicked");
 		e.preventDefault(); //cancel form submit
 		
 		var jsObj = $post_example.serializeObject()
@@ -24,12 +24,12 @@ $(document).ready(function() {
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log("Error " + jqXHR.getAllResponseHeaders() + " " + errorThrown);
-				$('#div_ajaxResponse').text( "Error" );
+				$('#login_div_ajaxResponse').text( "Error" );
 			},
 			success: function(data) { 
-				//console.log(data);
+				console.log(data);
 				if(data[0].HTTP_CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
+					$('#login_div_ajaxResponse').text( data[0].MSG );
 				}
 			},
 			complete: function(XMLHttpRequest) {
