@@ -93,22 +93,15 @@ public class User {
 			ps.setString(2, userData.optString("password"));
 			rs = ps.executeQuery();
 			if(rs.next()) {
-				/*
-				 * The put method allows you to add data to a JSONObject.
-				 * The first parameter is the KEY (no spaces)
-				 * The second parameter is the Value
-				 */
 				jsonObject.put("HTTP_CODE", "200");
 				jsonObject.put("MSG", "Login Successful");
-				/*
-				 * When you are dealing with JSONArrays, the put method is used to add
-				 * JSONObjects into JSONArray.
-				 */
 				session.setAttribute("estore_username",userData.optString("username"));
 				returnString = jsonArray.put(jsonObject).toString();
 				System.out.println("Session variable : "+session.getAttribute("estore_username"));
 			} else {
-				return Response.status(500).entity("Unable to enter Item").build();
+				jsonObject.put("HTTP_CODE", "500");
+				jsonObject.put("MSG", "<p class='text-danger'>Login Unsuccessful</p>");
+				returnString = jsonArray.put(jsonObject).toString();
 			}
 			
 			System.out.println( "returnString: " + returnString );
@@ -160,7 +153,7 @@ public class User {
 				 * The second parameter is the Value
 				 */
 				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Login Successful");
+				jsonObject.put("MSG", "Registered Successfully");
 				/*
 				 * When you are dealing with JSONArrays, the put method is used to add
 				 * JSONObjects into JSONArray.

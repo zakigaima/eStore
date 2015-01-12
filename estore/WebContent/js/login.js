@@ -23,7 +23,7 @@ $(document).ready(function() {
 		$.ajax(ajaxObj);		
 
 	
-	var $post_example = $('#login');
+	var $login_form = $('#login');
 		
 	/**
 	 * This is for the 2nd Submit button "Submit v2"
@@ -34,7 +34,7 @@ $(document).ready(function() {
 		//console.log("submit button has been clicked");
 		e.preventDefault(); //cancel form submit
 		
-		var jsObj = $post_example.serializeObject()
+		var jsObj = $login_form.serializeObject()
 			, ajaxObj = {};
 		
 		//console.log(jsObj);
@@ -50,9 +50,9 @@ $(document).ready(function() {
 			},
 			success: function(data) { 
 				//console.log(data);
-				if(data[0].HTTP_CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
-				}
+				$('#div_ajaxResponse').html( data[0].MSG );
+				if(data[0].HTTP_CODE == 200) 
+					window.location.href = "index.html";
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );

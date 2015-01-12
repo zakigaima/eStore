@@ -21,7 +21,6 @@ $(document).ready(function() {
 	$.ajax(ajaxObj);
 	
 	$('#logout').click(function() {
-		window.location("http://localhost:8080/estore/api/user/logout"),
 	    location.reload();
 	});	
 });

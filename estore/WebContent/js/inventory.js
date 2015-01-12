@@ -135,7 +135,7 @@ function templateGetInventory(param) {
 	return '<tr>' +
 				'<td class="itemname">' + param.itemname + '</td>' +
 				'<td class="itemdesc">' + param.itemdesc + '</td>' +
-				'<td class="itemprice">' + param.itemprice + '</td>' +
+				'<td class="itemprice">&#8377;' + param.itemprice + '</td>' +
 				'<td><button class="viewItem" value="' + param.itemid + '" type="button">View</button></td>'+
 			'</tr>';
 }
