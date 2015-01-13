@@ -17,6 +17,4 @@ public class Functions {
 		return session.getAttribute("estore_username").toString();
 	}
 	
-	
-
 }

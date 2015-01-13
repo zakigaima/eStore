@@ -30,7 +30,7 @@ public class User {
 	@Path("/confirmLogin")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response isLoggenIn() throws Exception {
+	public Response isLoggedIn() throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 		String returnString;
