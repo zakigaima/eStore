@@ -1,4 +1,4 @@
-package com.abyeti.estore.purchase;
+package com.abyeti.estore.transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,16 +20,20 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.abyeti.db.PGDBConn;
+import com.abyeti.functions.Functions;
+import com.abyeti.util.ToJSON;
 
-@Path("/purchase")
-public class Purchase {
+
+@Path("/transaction")
+public class Transaction {
 
 	@Context private HttpServletRequest request;
-	@Path("/{itemid}")
+	
+	@Path("new/{itemid}")
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addItem(@PathParam("itemid") int itemid/*, String incomingData*/) throws Exception {
+	public Response addItem(@PathParam("itemid") int itemid) throws Exception {
 		
 		HttpSession session = request.getSession();
 		if(session.getAttribute("estore_username")==null) {
@@ -93,5 +98,84 @@ public class Purchase {
 		
 		return Response.ok(returnString).build();
 	}
+	
+	@Path("/sales")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response returnAllSales() throws Exception {
+		
+		PreparedStatement query = null;
+		Connection conn = null;
+		String returnString = "sss";
+		Response rb = null;
+		HttpSession session = request.getSession();
+		String seller = session.getAttribute("estore_username").toString();
+		System.out.println("Session: "+ seller);
+		
+		try {
+			conn = PGDBConn.dbConnection();
+			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,t.buyername from item i,transaction t WHERE i.itemid=t.itemid AND i.username=?");
+			query.setString(1, seller);
+			
+			ResultSet rs = query.executeQuery();
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			json = converter.toJSONArray(rs);
+			query.close(); //close connection
+			
+			returnString = json.toString();
+			rb = Response.ok(returnString).build();
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			 if (conn != null) conn.close();
+		}
+		
+		return rb;
+	}
+	
+	@Path("/purchases")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response returnAllPurchases() throws Exception {
+		
+		PreparedStatement query = null;
+		Connection conn = null;
+		String returnString = null;
+		Response rb = null;
+		String seller = Functions.getLoggedInUsername(request);
+		
+		try {
+			conn = PGDBConn.dbConnection();
+			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,username from item i,transaction t WHERE i.itemid=t.itemid AND t.buyername=?");
+			query.setString(1, seller);
+			
+			ResultSet rs = query.executeQuery();
+			
+			ToJSON converter = new ToJSON();
+			JSONArray json = new JSONArray();
+			
+			json = converter.toJSONArray(rs);
+			query.close(); //close connection
+			
+			returnString = json.toString();
+			rb = Response.ok(returnString).build();
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			 if (conn != null) conn.close();
+		}
+		
+		return rb;
+	}
+
 	
 }

@@ -1,11 +1,3 @@
-/**
- * js file for post.html
- * Please use modern web browser as this file will not attempt to be
- * compatible with older browsers. Use Chrome and open javascript console
- * or Firefox with developer console.
- * 
- * jquery is required
- */
 $(document).ready(function() {
 	
 	var $inventory = $('#buy_item');
@@ -37,46 +29,13 @@ $(document).ready(function() {
 		
 		buyItem(obj,itemid);
 	});
-/*	$('#submit_it').click(function(e) {
-		//console.log("submit button has been clicked");
-		e.preventDefault(); //cancel form submit
-		
-		var jsObj = $post_example.serializeObject()
-			, ajaxObj = {};
-		
-		//console.log(jsObj);
-		
-		ajaxObj = {  
-			type: "POST",
-			url: "http://localhost:8080/estore/api/purchase", 
-			data: JSON.stringify(jsObj), 
-			contentType:"application/json",
-			error: function(jqXHR, textStatus, errorThrown) {
-				console.log("Error " + jqXHR.getAllResponseHeaders() + " " + errorThrown);
-				$('#div_ajaxResponse').text( "Error" );
-			},
-			success: function(data) { 
-				//console.log(data);
-				if(data[0].HTTP_CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
-				}
-			},
-			complete: function(XMLHttpRequest) {
-				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-			}, 
-			dataType: "json" //request JSON
-		};
-		
-		$.ajax(ajaxObj);
-	}); */
+
 });
-
-
 function buyItem(obj,itemid) {
 	
 	ajaxObj = {  
 			type: "POST",
-			url: "http://localhost:8080/estore/api/purchase/" + itemid,
+			url: "http://localhost:8080/estore/api/transaction/new/" + itemid,
 			data: JSON.stringify(obj), 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -104,7 +63,7 @@ function getInventory() {
 	
 	ajaxObj = {  
 			type: "GET",
-			url: "http://localhost:8080/estore/api/inventory", 
+			url: "http://localhost:8080/estore/api/item/inventory", 
 			data: "ts="+n, 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -119,7 +78,7 @@ function getInventory() {
 					html_string = html_string + templateGetInventory(val1);
 				});
 				
-				$('#get_inventory').html("<table class='table table-striped table-bordered'>" +
+				$('#get_inventory').html("<table class='table table-hover'>" +
 										"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
 			},
 			complete: function(XMLHttpRequest) {
@@ -136,7 +95,7 @@ function templateGetInventory(param) {
 				'<td class="itemname">' + param.itemname + '</td>' +
 				'<td class="itemdesc">' + param.itemdesc + '</td>' +
 				'<td class="itemprice">&#8377;' + param.itemprice + '</td>' +
-				'<td><button class="viewItem" value="' + param.itemid + '" type="button">View</button></td>'+
+				'<td><button class="viewItem btn btn-default" value="' + param.itemid + '" type="button">View</button></td>'+
 			'</tr>';
 }
 

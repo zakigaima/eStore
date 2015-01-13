@@ -10,7 +10,7 @@ function getPurchases() {
 	
 	ajaxObj = {  
 			type: "GET",
-			url: "http://localhost:8080/estore/api/purchases", 
+			url: "http://localhost:8080/estore/api/transaction/purchases", 
 			data: "ts="+n, 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {

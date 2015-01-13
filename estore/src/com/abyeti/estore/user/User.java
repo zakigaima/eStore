@@ -3,12 +3,8 @@ package com.abyeti.estore.user;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Enumeration;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,7 +17,9 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+
 import com.abyeti.db.*;
+import com.abyeti.functions.Functions;
 
 @Path("/user")
 public class User {
@@ -29,30 +27,21 @@ public class User {
 
 	@Context private HttpServletRequest request;
 	
-	public boolean isLoggedIn() {
-		HttpSession session = request.getSession();
-		if(session.getAttribute("estore_username")==null) 
-			return false;
-		return true;
-			
-	}
-	
 	@Path("/confirmLogin")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response isLoggenIn() throws Exception {
-		HttpSession session = request.getSession();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 		String returnString;
-		if(!isLoggedIn()) {
+		if(!Functions.isLoggedIn(request)) {
 			jsonObject.put("CODE", "500");
 			jsonObject.put("MSG", "You are not logged in, <a href='login.html'>Login</a>");
 			returnString = jsonArray.put(jsonObject).toString();
 			return Response.ok(returnString).build();
 		}
 		jsonObject.put("CODE", "200");
-		jsonObject.put("MSG", "Welcome,  "+session.getAttribute("estore_username"));
+		jsonObject.put("MSG", "Welcome,  "+Functions.getLoggedInUsername(request));
 		returnString = jsonArray.put(jsonObject).toString();
 		return Response.ok(returnString).build();
 	}
@@ -173,5 +162,4 @@ public class User {
 		
 		return Response.ok(returnString).build();
 	}
-	
 }

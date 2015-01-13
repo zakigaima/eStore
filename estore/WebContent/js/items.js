@@ -49,7 +49,7 @@ function updateItem(obj, id, desc, price) {
 	console.log(JSON.stringify(obj));
 	ajaxObj = {  
 			type: "PUT",
-			url: "http://localhost:8080/estore/api/items/" + id + "/" + desc + "/" + price,
+			url: "http://localhost:8080/estore/api/item/" + id + "/" + desc + "/" + price,
 			data: JSON.stringify(obj), 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
@@ -72,7 +72,7 @@ function updateItem(obj, id, desc, price) {
 function deleteItem(id) {
 	ajaxObj = {  
 			type: "DELETE",
-			url: "http://localhost:8080/estore/api/items/" + id,
+			url: "http://localhost:8080/estore/api/item/" + id,
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log(jqXHR.responseText);
@@ -101,7 +101,7 @@ function getItems() {
 	
 	ajaxObj = {  
 			type: "GET",
-			url: "http://localhost:8080/estore/api/items", 
+			url: "http://localhost:8080/estore/api/item/all", 
 			data: "ts="+n, 
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
