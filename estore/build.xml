@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project default="warTarget" basedir=".">
+	<property name="base" value="." />
+	<target name="warTarget">
+		<war warfile="estore.war" webxml="./WebContent/WEB-INF/web.xml">
+			<classes dir="./build/classes" />
+			<fileset dir="./WebContent/"/>
+			<fileset dir="./src/"/>
+		</war>
+		<antcall target="deployTarget" />
+	</target>
+	<target name="deployTarget">
+		<copy file="${base}/estore.war" todir="C:\Program Files\Apache Software Foundation\Tomcat 8.0\webapps"/>
+	</target>
+</project>
