@@ -116,7 +116,7 @@ function getItems() {
 					html_string = html_string + templateGetInventory(val1);
 				});
 				
-				$('#get_items').html("<table class='table table-striped table-bordered'>" +
+				$('#get_items').html("<table class='table table-hover'>" +
 										"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th>Sold</th><th></th><th></th></tr>"+ html_string + "</tbody></table>");
 			},
 			complete: function(XMLHttpRequest) {

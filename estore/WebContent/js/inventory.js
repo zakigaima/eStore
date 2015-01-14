@@ -93,7 +93,7 @@ function getInventory() {
 function templateGetInventory(param) {
 	return '<tr>' +
 				'<td class="itemname">' + param.itemname + '</td>' +
-				'<td class="itemdesc">' + param.itemdesc + '</td>' +
+				'<td class="itemdesc hidden">' + param.itemdesc + '</td>' +
 				'<td class="itemprice">&#8377;' + param.itemprice + '</td>' +
 				'<td><button class="viewItem btn btn-default" value="' + param.itemid + '" type="button">View</button></td>'+
 			'</tr>';

@@ -1,4 +1,11 @@
 var estoreApp = angular.module('estoreApp',[]);
+
+estoreApp.controller('NavController',function($scope,$http) {
+	$http.get("http://localhost:8080/estore/api/nav").success( function(response) {
+	    $scope.navtabs = response;
+	 });
+});
+
 $(document).ready(function() {
 	ajaxObj = {  
 		type: "GET",
@@ -16,13 +23,7 @@ $(document).ready(function() {
 	
 	$(document.body).on('click', '#logout', function(e) {
 		window.location.href="http://localhost:8080/estore/api/user/logout";
-		setTimeout( function() { location.reload(); }, 200);		
+		setTimeout( function() { window.location.href="http://localhost:8080/estore/"; }, 200);		
 
 	});
-});
-
-estoreApp.controller('NavController',function($scope,$http) {
-	$http.get("http://localhost:8080/estore/api/nav").success( function(response) {
-	    $scope.navtabs = response;
-	 });
 });

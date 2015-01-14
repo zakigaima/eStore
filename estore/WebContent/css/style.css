@@ -91,3 +91,8 @@ src: local('Myriad Pro Bold'), url('../fonts/MYRIADPRO-BOLD.woff') format('woff'
 	padding:10px 0;
 }
 
+#itemdesc {
+	background: none;
+	border: none;
+	font-family: 'Myriad Pro Regular';
+}

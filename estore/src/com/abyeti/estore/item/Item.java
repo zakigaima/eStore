@@ -37,7 +37,7 @@ public class Item {
 	public Response addItem(String incomingData) throws Exception {
 		
 		HttpSession session = request.getSession();
-		if(Functions.isLoggedIn(request)) {
+		if(!Functions.isLoggedIn(request)) {
 			System.out.println("Not Logged In");
 			return Response.status(500).entity("Login Required").build();
 		}
