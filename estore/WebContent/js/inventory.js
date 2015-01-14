@@ -72,14 +72,18 @@ function getInventory() {
 			success: function(data) { 
 				//console.log(data);
 				var html_string = "";
-				
-				$.each(data, function(index1, val1) {
-					//console.log(val1);
-					html_string = html_string + templateGetInventory(val1);
-				});
-				
-				$('#get_inventory').html("<table class='table table-hover'>" +
-										"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
+				if(data[0].CODE==500) {
+					$('#status').html(data[0].MSG);
+				}
+				else {
+					$.each(data, function(index1, val1) {
+						//console.log(val1);
+						html_string = html_string + templateGetInventory(val1);
+					});
+					
+					$('#get_inventory').html("<table class='table table-hover'>" +
+											"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
+				}
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );

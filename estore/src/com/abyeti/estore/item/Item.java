@@ -91,6 +91,7 @@ public class Item {
 		HttpSession session = request.getSession();
 		String seller = session.getAttribute("estore_username").toString();
 		System.out.println("Session: "+ seller);
+		JSONObject jsObj = new JSONObject();
 		
 		try {
 			conn = PGDBConn.dbConnection();
@@ -98,16 +99,17 @@ public class Item {
 			query.setString(1, seller);
 			
 			ResultSet rs = query.executeQuery();
-			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
-			
 			json = converter.toJSONArray(rs);
+			if(json.length()==0) {
+				jsObj.put("CODE", "500");
+				jsObj.put("MSG", "<i>No items exist</i>");
+				json.put(jsObj);
+			}
 			query.close(); //close connection
-			
 			returnString = json.toString();
 			rb = Response.ok(returnString).build();
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -211,6 +213,7 @@ public class Item {
 		Connection conn = null;
 		String returnString = null;
 		Response rb = null;
+		JSONObject jsObj = new JSONObject();
 		HttpSession session = request.getSession();
 		
 		System.out.println("Session: "+ session.getAttribute("estore_username"));
@@ -220,16 +223,18 @@ public class Item {
 			query = conn.prepareStatement("select itemid,itemname,itemdesc,itemprice from item");
 			
 			ResultSet rs = query.executeQuery();
-			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
 			
 			json = converter.toJSONArray(rs);
+			if(json.length()==0) {
+				jsObj.put("CODE", "500");
+				jsObj.put("MSG", "<i>No items exist</i>");
+				json.put(jsObj);
+			}
 			query.close(); //close connection
-			
 			returnString = json.toString();
 			rb = Response.ok(returnString).build();
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
