@@ -82,7 +82,7 @@ function getInventory() {
 					});
 					
 					$('#get_inventory').html("<table class='table table-hover'>" +
-											"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
+											"<tbody><tr><th>Item</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
 				}
 			},
 			complete: function(XMLHttpRequest) {

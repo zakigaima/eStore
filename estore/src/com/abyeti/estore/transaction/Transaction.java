@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -35,13 +34,11 @@ public class Transaction {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItem(@PathParam("itemid") int itemid) throws Exception {
 		
-		HttpSession session = request.getSession();
-		if(session.getAttribute("estore_username")==null) {
-			System.out.println("Not Logged In");
-			return Response.status(500).entity("Login Required").build();
-		}
-		
 		String returnString = null;
+		if(!Functions.isLoggedIn(request)) {
+			returnString = "User Should be logged in for this request";
+			return Response.ok(returnString).build();
+		}
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 		Connection conn = null;
@@ -66,7 +63,7 @@ public class Transaction {
 			
 			ps = conn.prepareStatement("INSERT INTO transaction(itemid,buyername,sellername) VALUES(?,?,?) ");
 			ps.setInt(1, itemid);
-			ps.setString(2, (String) session.getAttribute("estore_username"));
+			ps.setString(2, Functions.getLoggedInUsername(request));
 			ps.setString(3, seller);
 			
 			int http_code = ps.executeUpdate();
@@ -108,8 +105,11 @@ public class Transaction {
 		Connection conn = null;
 		String returnString = "sss";
 		Response rb = null;
-		HttpSession session = request.getSession();
-		String seller = session.getAttribute("estore_username").toString();
+		String seller = Functions.getLoggedInUsername(request);
+		if(!Functions.isLoggedIn(request)) {
+			returnString = "User Should be logged in for this request";
+			return Response.ok(returnString).build();
+		}
 		System.out.println("Session: "+ seller);
 		
 		try {
@@ -157,6 +157,10 @@ public class Transaction {
 		Connection conn = null;
 		String returnString = null;
 		Response rb = null;
+		if(!Functions.isLoggedIn(request)) {
+			returnString = "User Should be logged in for this request";
+			return Response.ok(returnString).build();
+		}
 		String seller = Functions.getLoggedInUsername(request);
 		
 		try {

@@ -120,7 +120,7 @@ function getItems() {
 					});
 					
 					$('#get_items').html("<table class='table table-hover'>" +
-											"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th>Sold</th><th></th><th></th></tr>"+ html_string + "</tbody></table>");
+											"<tbody><tr><th>Item</th><th>Price</th><th>Sold</th><th></th><th></th></tr>"+ html_string + "</tbody></table>");
 				}
 			},
 			complete: function(XMLHttpRequest) {

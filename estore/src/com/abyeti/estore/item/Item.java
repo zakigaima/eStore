@@ -88,14 +88,27 @@ public class Item {
 		Connection conn = null;
 		String returnString = null;
 		Response rb = null;
-		HttpSession session = request.getSession();
-		String seller = session.getAttribute("estore_username").toString();
+		
+		if(!Functions.isLoggedIn(request)) {
+			returnString = "User Should be logged in for this request";
+			return Response.ok(returnString).build();
+		}
+		
+		String seller = Functions.getLoggedInUsername(request);
 		System.out.println("Session: "+ seller);
 		JSONObject jsObj = new JSONObject();
 		
 		try {
 			conn = PGDBConn.dbConnection();
-			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice, COUNT(t.itemid)  from item i,transaction t WHERE i.itemid=t.itemid AND i.username=? GROUP BY i.itemid");
+			query = conn.prepareStatement("select item.itemid,itemname,itemdesc,itemprice, "
+					+ "COUNT(transaction.itemid) "
+					+ "from item LEFT JOIN transaction "
+					+ "ON item.itemid=transaction.itemid "
+					+ "WHERE username=? GROUP BY item.itemid");
+			/*query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice, COUNT(t.itemid)  "
+					+ "from item i,transaction t "
+					+ "WHERE i.itemid=t.itemid AND i.username=? "
+					+ "GROUP BY i.itemid");*/
 			query.setString(1, seller);
 			
 			ResultSet rs = query.executeQuery();
