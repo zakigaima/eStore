@@ -19,14 +19,18 @@ function getPurchases() {
 			success: function(data) { 
 				//console.log(data);
 				var html_string = "";
-				
-				$.each(data, function(index1, val1) {
-					//console.log(val1);
-					html_string = html_string + templateGetInventory(val1);
-				});
-				
-				$('#get_purchases').html("<table class='table table-hover'>" +
-										"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th>Bought from</th></tr>"+ html_string + "</tbody></table>");
+				if(data[0].CODE==500) {
+					$('#status').html(data[0].MSG);
+				}
+				else {
+					$.each(data, function(index1, val1) {
+						//console.log(val1);
+						html_string = html_string + templateGetInventory(val1);
+					});
+					
+					$('#get_purchases').html("<table class='table table-hover'>" +
+											"<tbody><tr><th>Item</th><th>Desc</th><th>Price</th><th>Bought from</th></tr>"+ html_string + "</tbody></table>");
+				}
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );

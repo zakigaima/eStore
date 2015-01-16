@@ -3,9 +3,12 @@ package com.abyeti.estore;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -16,6 +19,8 @@ import com.abyeti.db.PGDBConn;
 
 @Path("/install")
 public class Install {
+	
+	@Context private HttpServletRequest request;
 	
 	public int createTable(String query) throws Exception {
 		Connection conn = null;
@@ -37,6 +42,8 @@ public class Install {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response installEStore() throws Exception {
+		HttpSession session = request.getSession();
+		session.invalidate();
 		String tbl_users = "CREATE TABLE users ( "
 				+ "userid serial NOT NULL , "
 				+ "username text, password text, email text, "

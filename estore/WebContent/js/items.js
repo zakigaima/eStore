@@ -136,7 +136,7 @@ function templateGetInventory(param) {
 	return '<tr>' +
 				'<td class="itemid hidden">' + param.itemid + '</td>' +
 				'<td class="itemname">' + param.itemname + '</td>' +
-				'<td class="itemdesc">' + param.itemdesc + '</td>' +
+				'<td class="itemdesc hidden">' + param.itemdesc + '</td>' +
 				'<td class="itemprice">' + param.itemprice + '</td>' +
 				'<td class="itemcount">' + param.count + ' times</td>' +
 				'<td><a href="#" class="edit"><span class="glyphicon glyphicon-pencil"></span></a></td>' +

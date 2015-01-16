@@ -121,8 +121,17 @@ public class Transaction {
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
-			
+
 			json = converter.toJSONArray(rs);
+
+			if(json.length()==0) {
+				JSONObject jsObj = new JSONObject();
+				jsObj.put("CODE", "500");
+				jsObj.put("MSG", "<i>No items exist</i>");
+				json.put(jsObj);
+			}
+
+			
 			query.close(); //close connection
 			
 			returnString = json.toString();
@@ -161,6 +170,13 @@ public class Transaction {
 			JSONArray json = new JSONArray();
 			
 			json = converter.toJSONArray(rs);
+
+			if(json.length()==0) {
+				JSONObject jsObj = new JSONObject();
+				jsObj.put("CODE", "500");
+				jsObj.put("MSG", "<i>No items exist</i>");
+				json.put(jsObj);
+			}
 			query.close(); //close connection
 			
 			returnString = json.toString();
