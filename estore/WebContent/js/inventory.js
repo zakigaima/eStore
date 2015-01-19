@@ -1,9 +1,16 @@
+estoreApp.controller('ItemsController',function($scope,$http) {
+	$http.get("http://localhost:8080/estore/api/item/inventory").success( function(response) {
+		if(response[0].CODE==500)
+			$('#status').html(response[0].MSG);
+		else 
+			$scope.items = response;
+	 });
+});
+
 $(document).ready(function() {
 	
 	var $inventory = $('#buy_item');
-	
-	getInventory();
-	
+		
 	$(document.body).on('click', ':button, .viewItem', function(e) {
 		//console.log(this);
 		var $this = $(this)
@@ -46,17 +53,13 @@ function buyItem(obj,itemid) {
 				//console.log(data);
 				$('#update_response').text( data[0].MSG );
 			},
-			complete: function(XMLHttpRequest) {
-				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-				getInventory();
-			}, 
 			dataType: "json" //request JSON
 		};
 		
 	return $.ajax(ajaxObj);
 }
 
-function getInventory() {
+/*function getInventory() {
 	
 	var d = new Date()
 		, n = d.getTime();
@@ -103,3 +106,4 @@ function templateGetInventory(param) {
 			'</tr>';
 }
 
+*/

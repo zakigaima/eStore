@@ -44,9 +44,11 @@ $(document).ready(function() {
 				$('#div_ajaxResponse').text( "Error" );
 			},
 			success: function(data) { 
-				//console.log(data);
+				console.log(data);
+				
 				if(data[0].CODE == 200) {
 					$('#div_ajaxResponse').text( data[0].MSG );
+					setTimeout( function() { window.location.href="http://localhost:8080/estore/"; }, 200);		
 				}
 			},
 			complete: function(XMLHttpRequest) {

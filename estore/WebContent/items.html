@@ -12,12 +12,13 @@
 
 
 	<script src="js/jquery-min.js"></script>
-	<script src="js/items.js"></script>
 	<script src="js/polyfill.js"></script>
     <link href="css/style.css" rel="stylesheet">
 	<script src="js/angular.min.js" type="text/javascript"></script>
 	<script src="js/angular-route.min.js" type="text/javascript"></script>
 	<script src="js/script.js"></script>
+	<script src="js/items.js"></script>
+	
 
 </head>
 <body data-ng-app="estoreApp">
@@ -26,7 +27,27 @@
 	<div class="container">
 		<div class="col-md-6">
 			<h3>My Items</h3>
-			<div id="get_items" ></div>
+			<div id="get_items" >
+				<table class="table table-hover" data-ng-controller='MyItemsController'>
+					<tr>
+						<th>Item</th>
+						<th>Desc</th>
+						<th>Price</th>
+						<th>Sold</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr data-ng-repeat="x in myitems">
+						<td class="itemid hidden">{{x.itemid}}</td>
+						<td class="itemname">{{x.itemname}}</td>
+						<td class="itemdesc">{{x.itemdesc}}</td>
+						<td class="itemprice">{{x.itemprice}}</td>
+						<td class="itemcount">{{x.count}} times</td>
+						<td><a href="#" class="edit"><span class="glyphicon glyphicon-pencil"></span></a></td>
+						<td><a href="#" class="remove"><span class="glyphicon glyphicon-remove"></span></a></td>
+					</tr>
+				</table>
+			</div>
 			<div id="status" ></div>
 		</div>
 		<div class="col-md-6">

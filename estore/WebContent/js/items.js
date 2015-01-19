@@ -1,11 +1,26 @@
+var getItemsController = {};
+getItemsController.MyItemsController = function ($scope,$http) {
+	$http.get("http://localhost:8080/estore/api/item/all").success( function(response) {
+		if(response[0].CODE==500) 
+			$('#status').html(response[0].MSG);
+		else
+			$scope.myitems = response;
+	 });
+};
+estoreApp.controller(getItemsController);
+/*estoreApp.controller('MyItemsController',function MyItemsController($scope,$http) {
+	$http.get("http://localhost:8080/estore/api/item/all").success( function(response) {
+		if(response[0].CODE==500) 
+			$('#status').html(response[0].MSG);
+		else
+			$scope.myitems = response;
+	 });
+});*/
 $(document).ready(function() {
-	
+
 	var $update_form = $('#update_form');
 	$update_form.hide();
-	
-	getItems();
-
-	
+		
 	$(document.body).on('click', '.edit', function(e) {
 		//console.log(this);
 		$update_form.show();
@@ -61,7 +76,7 @@ function updateItem(obj, id, desc, price) {
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-				getItems();
+				estoreApp.controller(getItemsController);
 			}, 
 			dataType: "json" //request JSON
 		};
@@ -83,7 +98,7 @@ function deleteItem(id) {
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-				getItems();
+				//getItems();
 			}, 
 			dataType: "json" //request JSON
 		};
@@ -93,7 +108,7 @@ function deleteItem(id) {
 
 
 
-
+/*
 function getItems() {
 	
 	var d = new Date()
@@ -144,3 +159,4 @@ function templateGetInventory(param) {
 			'</tr>';
 }
 
+*/

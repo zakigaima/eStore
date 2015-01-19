@@ -225,7 +225,7 @@ public class Item {
 			json = converter.toJSONArray(rs);
 			if(json.length()==0) {
 				String MSG = "<i>No items exist</i>";
-				returnString = Functions.createJSONMessage(200, MSG);
+				returnString = Functions.createJSONMessage(500, MSG);
 			}
 			else 
 				returnString = json.toString();
