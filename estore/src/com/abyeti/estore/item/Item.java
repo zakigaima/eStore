@@ -24,10 +24,32 @@ import com.abyeti.db.PGDBConn;
 import com.abyeti.functions.Functions;
 import com.abyeti.util.ToJSON;
 
+/**
+ * This class is used from performing CRUD operations on items in eStore
+ * 
+ * @author Abyeti-1
+ *
+ */
+
+
 @Path("/item")
 public class Item {
 
-	@Context private HttpServletRequest request;
+	@Context private HttpServletRequest request; //request variable is mainly used to manage sessions
+	
+	/**
+	 * This method creates a new item in the eStore.
+	 * 
+	 * It uses @POST annotation
+	 * 
+	 * @param incomingData (in JSON format)
+	 * the incomingdata is then mapped with the ItemEntry class defined in the bottom of this file
+	 * ObjectMapper class is used to map the incomingdata and ItemEntry class
+	 * 
+	 * @return Response object in JSON format.
+	 * 
+	 * @throws Exception
+	 */
 	
 	@Path("/new")
 	@POST
@@ -53,7 +75,7 @@ public class Item {
 			ps.setString(1, entry.item_name);
 			ps.setString(2, entry.item_desc);
 			ps.setDouble(3, entry.item_price);
-			ps.setString(4, Functions.getLoggedInUsername(request));
+			ps.setString(4, Functions.getLoggedInUsername(request)); //getting Logged in Username
 			
 			int http_code = ps.executeUpdate();
 			
@@ -75,6 +97,18 @@ public class Item {
 		return Response.ok(returnString).build();
 	}
 
+	/**
+	 * This method returns all the items of the logged in seller.
+	 * The input is taken from the session variable (Written in Functions class)
+	 * 
+	 * It uses @GET annotation
+	 * 
+	 * ***It is mandatory to be logged in for this method execution***
+	 * 
+	 * @return Response object of JSONArray
+	 * 
+	 * @throws Exception
+	 */
 
 	@Path("/all")
 	@GET
@@ -126,6 +160,20 @@ public class Item {
 		return rb;
 	}
 	
+	
+	/**
+	 * Updates the item with description and price.
+	 * 
+	 * It uses @PUT annotation
+	 * 
+	 * @param itemid
+	 * @param itemdesc
+	 * @param itemprice
+	 * @param incomingdata
+	 * @return
+	 * @throws Exception
+	 */
+	
 	@Path("/{itemid}/{itemdesc}/{itemprice}")
 	@PUT
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
@@ -167,6 +215,16 @@ public class Item {
 		
 		return rb;
 	}
+	
+	/**
+	 * It removes the item from the database using itemid
+	 * It uses @DELETE annotation
+	 * 
+	 * @param itemid
+	 * @param incomingdata
+	 * @return
+	 * @throws Exception
+	 */
 
 	@Path("/{itemid}")
 	@DELETE
@@ -204,6 +262,14 @@ public class Item {
 		return rb;
 	}	
 
+	
+	/**
+	 * This method gets all the items of all the sellers from the eStore.
+	 * 
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	@Path("/inventory")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -244,9 +310,15 @@ public class Item {
 	
 }
 
+/**
+ * 
+ * Simple class to creation of POJO
+ * 
+ * @author Abyeti-1
+ *
+ */
 class ItemEntry {
 	public String item_name;
 	public String item_desc;
 	public double item_price;
 }
-

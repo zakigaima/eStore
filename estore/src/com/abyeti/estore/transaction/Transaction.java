@@ -16,18 +16,31 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 
 import com.abyeti.db.PGDBConn;
 import com.abyeti.functions.Functions;
 import com.abyeti.util.ToJSON;
 
-
+/**
+ * 
+ * This class has the methods that are related to transactions in eStore Application
+ * 
+ * @author Abyeti-1
+ *
+ */
 @Path("/transaction")
 public class Transaction {
 
 	@Context private HttpServletRequest request;
 	
+	/**
+	 * It creates the new transaction that has buyer name coming from the session variable.
+	 * it takes the itemid and creates the new entry in the transaction table
+	 * 
+	 * @param itemid
+	 * @return
+	 * @throws Exception
+	 */
 	@Path("new/{itemid}")
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
@@ -39,19 +52,10 @@ public class Transaction {
 			returnString = "User Should be logged in for this request";
 			return Response.ok(returnString).build();
 		}
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		
 		try {
-			
-			/*
-			 * We can create a new instance and it will accept a JSON string
-			 * By doing this, we can now access the data.
-			 */
-			//JSONObject itemData = new JSONObject(incomingData);
-			//System.out.println( "jsonData: " + itemData.toString() );
 			
 			conn = PGDBConn.dbConnection();
 			
@@ -67,26 +71,17 @@ public class Transaction {
 			ps.setString(3, seller);
 			
 			int http_code = ps.executeUpdate();
-						
-			if( http_code != 0 ) {
-				/*
-				 * The put method allows you to add data to a JSONObject.
-				 * The first parameter is the KEY (no spaces)
-				 * The second parameter is the Value
-				 */
-				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Thanks for Buying");
-				/*
-				 * When you are dealing with JSONArrays, the put method is used to add
-				 * JSONObjects into JSONArray.
-				 */
-				returnString = jsonArray.put(jsonObject).toString();
-			} else {
-				System.out.println("Invalid");
-				return Response.status(500).entity("Unable to enter Item").build();
-			}
 			
-			System.out.println( "returnString: " + returnString );
+			int CODE;
+			String MSG;
+			if( http_code != 0 ) {
+				CODE = 200;
+				MSG = "Thanks for Buying";
+			} else {
+				CODE = 500;
+				MSG = "Error in the Transaction";
+			}
+			returnString = Functions.createJSONMessage(CODE, MSG);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -96,6 +91,11 @@ public class Transaction {
 		return Response.ok(returnString).build();
 	}
 	
+	/**
+	 * This method returns all the sales of the logged in user
+	 * @return
+	 * @throws Exception
+	 */
 	@Path("/sales")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -103,14 +103,13 @@ public class Transaction {
 		
 		PreparedStatement query = null;
 		Connection conn = null;
-		String returnString = "sss";
+		String returnString = null;
 		Response rb = null;
 		String seller = Functions.getLoggedInUsername(request);
 		if(!Functions.isLoggedIn(request)) {
 			returnString = "User Should be logged in for this request";
 			return Response.ok(returnString).build();
 		}
-		System.out.println("Session: "+ seller);
 		
 		try {
 			conn = PGDBConn.dbConnection();
@@ -124,17 +123,13 @@ public class Transaction {
 
 			json = converter.toJSONArray(rs);
 
-			if(json.length()==0) {
-				JSONObject jsObj = new JSONObject();
-				jsObj.put("CODE", "500");
-				jsObj.put("MSG", "<i>No items exist</i>");
-				json.put(jsObj);
-			}
+			if(json.length()==0) 
+				returnString = Functions.createJSONMessage(500, "<i>No items exist</i>");
+			else
+				returnString = json.toString();
 
+			query.close();
 			
-			query.close(); //close connection
-			
-			returnString = json.toString();
 			rb = Response.ok(returnString).build();
 			
 		}
@@ -148,6 +143,11 @@ public class Transaction {
 		return rb;
 	}
 	
+	/**
+	 * This method returns all the purchases of the logged in user
+	 * @return
+	 * @throws Exception
+	 */
 	@Path("/purchases")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -175,15 +175,13 @@ public class Transaction {
 			
 			json = converter.toJSONArray(rs);
 
-			if(json.length()==0) {
-				JSONObject jsObj = new JSONObject();
-				jsObj.put("CODE", "500");
-				jsObj.put("MSG", "<i>No items exist</i>");
-				json.put(jsObj);
-			}
-			query.close(); //close connection
-			
-			returnString = json.toString();
+			if(json.length()==0) 
+				returnString = Functions.createJSONMessage(500, "<i>No items exist</i>");
+			else
+				returnString = json.toString();
+
+			query.close(); 
+
 			rb = Response.ok(returnString).build();
 			
 		}
@@ -196,6 +194,5 @@ public class Transaction {
 		
 		return rb;
 	}
-
 	
 }

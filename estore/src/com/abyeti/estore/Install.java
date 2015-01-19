@@ -12,15 +12,28 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
-
 import com.abyeti.db.PGDBConn;
+import com.abyeti.functions.Functions;
 
+/**
+ * 
+ * This class is used the install the eStore application in the server.
+ * It requires the database to be created and then the database name should be reflected in com.abyeti.db.PGDBConn class
+ * 
+ * @author Abyeti-1
+ *
+ */
 @Path("/install")
 public class Install {
 	
 	@Context private HttpServletRequest request;
+	
+	/**
+	 * This method creates table in the database 
+	 * @param query
+	 * @return 1, if the table is created, 0 if there was error in creation 
+	 * @throws Exception
+	 */
 	
 	public int createTable(String query) throws Exception {
 		Connection conn = null;
@@ -39,6 +52,15 @@ public class Install {
 		return 1;
 	}
 	
+	/**
+	 * 
+	 * This method installs the eStore Application by creating the database tables.
+	 * 
+	 * @return
+	 *  A message in JSON format that says whether the application is installed or not
+	 * 
+	 * @throws Exception
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response installEStore() throws Exception {
@@ -67,21 +89,18 @@ public class Install {
 		
 		
 		String returnString = null;
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();		
-		
 		int t1 = createTable(tbl_users);
 		int t2 = createTable(tbl_item);
 		int t3 = createTable(tbl_transaction);
-		if((t1+t2+t3)!=3) {
-			jsonObject.put("CODE", t1+t2+t3);
-			jsonObject.put("MSG", "eStore Already Installed or the database is not empty");
-			returnString = jsonArray.put(jsonObject).toString();
-		} else {
-			jsonObject.put("CODE", t1+t2+t3);
-			jsonObject.put("MSG", "eStore Application Installed");
-			returnString = jsonArray.put(jsonObject).toString();
-		}
+		String MSG;
+		
+		if((t1+t2+t3)!=3) 
+			MSG = "eStore Already Installed or the database is not empty";
+		else 
+			MSG = "eStore Application Installed";
+		
+		returnString = Functions.createJSONMessage(t1+t2+t3, MSG);
+		
 		return Response.ok(returnString).build();
 	}
 }

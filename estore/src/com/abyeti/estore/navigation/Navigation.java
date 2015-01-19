@@ -14,11 +14,28 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.abyeti.functions.Functions;
 
+/**
+ * This class is used to create the dynamic navigation bar.
+ * If the user is logged in, it should not show the login / register links
+ * and if the user in not logged in, it should only show login / register links
+ * 
+ * @author Abyeti-1
+ *
+ */
 @Path("/nav")
 public class Navigation {
 
 	@Context private HttpServletRequest request;
-	
+	/**
+	 * 
+	 * It creates the JSON object of three variables - link, class, value
+	 * 
+	 * @param link
+	 * @param classname
+	 * @param value
+	 * @return
+	 * @throws JSONException
+	 */
 	
 	public JSONObject createJSONObject(String link, String classname, String value) throws JSONException {
 		JSONObject jsonObject = new JSONObject();
@@ -28,12 +45,20 @@ public class Navigation {
 		return jsonObject;
 	}
 	
+	/**
+	 * It produces the list of navigation dynamically
+	 * 
+	 * @return
+	 *  Response Object in JSON format so that AngularJS catches it.
+	 * 
+	 * @throws Exception
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response returnNavigation() throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		String returnString = "";
-		if(Functions.isLoggedIn(request)) {
+		if(Functions.isLoggedIn(request)) { //if user is logged in 
 			jsonArray.put(createJSONObject("items.html", "", "My Items"));
 			jsonArray.put(createJSONObject("newitem.html", "", "Sell an Item"));
 			jsonArray.put(createJSONObject("sales.html", "", "My Sales"));

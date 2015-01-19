@@ -20,12 +20,27 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.abyeti.db.*;
 import com.abyeti.functions.Functions;
 
+/**
+ * 
+ * This class is used for operations that are performed on a User in eStore Applicaion
+ * It has methods of creating a new user,Logging in, Logging out and login confirmation
+ * 
+ * @author Abyeti-1
+ *
+ */
 @Path("/user")
 public class User {
 
 
-	@Context private HttpServletRequest request;
+	@Context private HttpServletRequest request; //request variable is mainly used to manage sessions
 	
+	
+	/**
+	 * This method is used to check if the user had logged in the eStore application
+	 * 
+	 * @return Response object in JSON format having two variables CODE and MSG.
+	 * @throws Exception
+	 */
 	@Path("/confirmLogin")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +60,10 @@ public class User {
 		return Response.ok(returnString).build();
 	}
 	
+	/**
+	 * It logs out the user, i.e. clears all the session variables from the application
+	 * @throws Exception
+	 */
 	@Path("/logout")
 	@GET
 	public void LogOut() throws Exception {
@@ -52,6 +71,17 @@ public class User {
 		session.invalidate();
 	}
 	
+	/**
+	 * This method logs in the user in the application
+	 * 
+	 * @param incomingData
+	 * 	 It takes the incoming data of the user in JSON format
+	 *   and compares it in the database.
+	 *   It creates a session for the correct user login
+	 *   
+	 * @return Response Object in JSON format
+	 * @throws Exception
+	 */
 	@Path("/login")
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
@@ -80,7 +110,7 @@ public class User {
 			if(rs.next()) {
 				CODE = 200;
 				MSG = "Login Successful";
-				session.setAttribute("estore_username",entry.username);
+				session.setAttribute("estore_username",entry.username); //creating session variable
 			} else {
 				CODE = 500;
 				MSG = "<p class='text-danger'>Login Unsuccessful</p>";
@@ -98,7 +128,16 @@ public class User {
 	}
 	
 	
-	
+	/**
+	 * This method creates a new user in the application
+	 * 
+	 * @param incomingData
+	 *   the incomingData is then mapped with the UserEntry class defined in the bottom of this file
+	 *   ObjectMapper class is used to map the incomingData and UserEntry class
+	 * 
+	 * @return Response object in JSONArray format
+	 * @throws Exception
+	 */
 	@Path("/new")
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
@@ -144,6 +183,12 @@ public class User {
 	}
 }
 
+/**
+ * A simple class for POJO.
+ * 
+ * @author Abyeti-1
+ *
+ */
 class UserEntry {
 	public String username;
 	public String password;

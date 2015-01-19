@@ -2,6 +2,12 @@ package com.abyeti.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * 
+ * A class for storing the Information of database and to connect to a postgres database
+ * @author Abyeti-1
+ *
+ */
 public class PGDBConn {
 	
 	public static String DRIVER_NAME = "org.postgresql.Driver";
@@ -10,6 +16,12 @@ public class PGDBConn {
 	public static String PASSWORD = "654321";
 	public static Connection conn = null;
 
+	/**
+	 * Creates Connection object using the above data
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
     public static Connection dbConnection() throws Exception {
 		
 		try{
