@@ -12,7 +12,7 @@ import org.owasp.esapi.ESAPI;
  * Note:  this java class requires the ESAPI 1.4.4 jar file
  * ESAPI is used to encode data
  * 
- * @author 308tube
+ * @author zakigaima
  */
 public class ToJSON {
 

@@ -12,6 +12,6 @@
 	</target>
 	<target name="deployTarget">
 		<copy file="${base}/estore.war" todir="C:\Program Files\Apache Software Foundation\Tomcat 8.0\webapps"/>
-		<copy file="${base}/estore.war" todir="\\ZAKI-VM\webapps"/>
+		<!--<copy file="${base}/estore.war" todir="\\ZAKI-VM\webapps"/> -->
 	</target>
 </project>

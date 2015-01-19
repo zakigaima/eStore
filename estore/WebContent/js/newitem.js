@@ -23,18 +23,13 @@ $(document).ready(function() {
 	$.ajax(ajaxObj);		
 	
 	
-	var $post_example = $('#add_item');
+	var $add_item = $('#add_item');
 		
-	/**
-	 * This is for the 2nd Submit button "Submit v2"
-	 * It will do the same thing as Submit above but the api
-	 * will process it in a different way.
-	 */
 	$('#submit_it').click(function(e) {
 		//console.log("submit button has been clicked");
 		e.preventDefault(); //cancel form submit
 		
-		var jsObj = $post_example.serializeObject()
+		var jsObj = $add_item.serializeObject()
 			, ajaxObj = {};
 		
 		//console.log(jsObj);
@@ -50,7 +45,7 @@ $(document).ready(function() {
 			},
 			success: function(data) { 
 				//console.log(data);
-				if(data[0].HTTP_CODE == 200) {
+				if(data[0].CODE == 200) {
 					$('#div_ajaxResponse').text( data[0].MSG );
 				}
 			},

@@ -3,6 +3,7 @@ package com.abyeti.estore.user;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
@@ -14,9 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
-
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.abyeti.db.*;
 import com.abyeti.functions.Functions;
@@ -31,18 +30,18 @@ public class User {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response isLoggedIn() throws Exception {
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();
 		String returnString;
+		String MSG;
+		int CODE;
 		if(!Functions.isLoggedIn(request)) {
-			jsonObject.put("CODE", "500");
-			jsonObject.put("MSG", "You are not logged in, <a href='login.html'>Login</a>");
-			returnString = jsonArray.put(jsonObject).toString();
-			return Response.ok(returnString).build();
+			MSG =  "You are not logged in, <a href='login.html'>Login</a>";
+			CODE = 500;
 		}
-		jsonObject.put("CODE", "200");
-		jsonObject.put("MSG", "Welcome,  "+Functions.getLoggedInUsername(request));
-		returnString = jsonArray.put(jsonObject).toString();
+		else {
+			MSG =  "Welcome,  "+Functions.getLoggedInUsername(request);
+			CODE = 200;
+		}
+		returnString = Functions.createJSONMessage(CODE, MSG);
 		return Response.ok(returnString).build();
 	}
 	
@@ -60,8 +59,6 @@ public class User {
 	public Response LoginUser(String incomingData) throws Exception {
 		
 		String returnString = null;
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -69,29 +66,26 @@ public class User {
 
 		try {
 			
-			/*
-			 * We can create a new instance and it will accept a JSON string
-			 * By doing this, we can now access the data.
-			 */
-			JSONObject userData = new JSONObject(incomingData);
-			System.out.println( "jsonData: " + userData.toString() );
+			ObjectMapper mapper = new ObjectMapper();
+			UserEntry entry = mapper.readValue(incomingData, UserEntry.class);
 			
 			conn = PGDBConn.dbConnection();
 			ps = conn.prepareStatement("SELECT username,password FROM users WHERE username=? AND PASSWORD=? ");
-			ps.setString(1, userData.optString("username"));
-			ps.setString(2, userData.optString("password"));
+			ps.setString(1, entry.username);
+			ps.setString(2, entry.password);
 			rs = ps.executeQuery();
+
+			int CODE;
+			String MSG;
 			if(rs.next()) {
-				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Login Successful");
-				session.setAttribute("estore_username",userData.optString("username"));
-				returnString = jsonArray.put(jsonObject).toString();
-				System.out.println("Session variable : "+session.getAttribute("estore_username"));
+				CODE = 200;
+				MSG = "Login Successful";
+				session.setAttribute("estore_username",entry.username);
 			} else {
-				jsonObject.put("HTTP_CODE", "500");
-				jsonObject.put("MSG", "<p class='text-danger'>Login Unsuccessful</p>");
-				returnString = jsonArray.put(jsonObject).toString();
+				CODE = 500;
+				MSG = "<p class='text-danger'>Login Unsuccessful</p>";
 			}
+			returnString = Functions.createJSONMessage(CODE, MSG);
 			
 			System.out.println( "returnString: " + returnString );
 			
@@ -112,49 +106,35 @@ public class User {
 	public Response addUser(String incomingData) throws Exception {
 		
 		String returnString = null;
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		
 		try {
 			
-			/*
-			 * We can create a new instance and it will accept a JSON string
-			 * By doing this, we can now access the data.
-			 */
-			JSONObject userData = new JSONObject(incomingData);
-			System.out.println( "jsonData: " + userData.toString() );
+			ObjectMapper mapper = new ObjectMapper();
+			UserEntry entry = mapper.readValue(incomingData, UserEntry.class);
 			
 			conn = PGDBConn.dbConnection();
 			ps = conn.prepareStatement("INSERT INTO users(username,password,email) VALUES(?,?,?) ");
-			ps.setString(1, userData.optString("username"));
-			ps.setString(2, userData.optString("password"));
-			ps.setString(3, userData.optString("email"));
+			ps.setString(1, entry.username);
+			ps.setString(2, entry.password);
+			ps.setString(3, entry.email);
 			
 			
-			int http_code = ps.executeUpdate();
-						
-			if( http_code != 0 ) {
-				/*
-				 * The put method allows you to add data to a JSONObject.
-				 * The first parameter is the KEY (no spaces)
-				 * The second parameter is the Value
-				 */
-				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Registered Successfully");
-				/*
-				 * When you are dealing with JSONArrays, the put method is used to add
-				 * JSONObjects into JSONArray.
-				 */
-				returnString = jsonArray.put(jsonObject).toString();
+			int code = ps.executeUpdate();
+			
+			int CODE;
+			String MSG;
+			if( code != 0 ) {
+				CODE = 200;
+				MSG = "Registered Successfully";
 			} else {
-				System.out.println("Invalid");
-				return Response.status(500).entity("Unable to enter Item").build();
+				CODE = 500;
+				MSG = "Registration Error!!";
 			}
 			
-			System.out.println( "returnString: " + returnString );
-			
+			returnString = Functions.createJSONMessage(CODE, MSG);
+						
 		} catch(Exception e) {
 			e.printStackTrace();
 			return Response.status(500).entity("Server was not able to process your request").build();
@@ -162,4 +142,10 @@ public class User {
 		
 		return Response.ok(returnString).build();
 	}
+}
+
+class UserEntry {
+	public String username;
+	public String password;
+	public String email;
 }

@@ -51,7 +51,7 @@ $(document).ready(function() {
 			success: function(data) { 
 				//console.log(data);
 				$('#div_ajaxResponse').html( data[0].MSG );
-				if(data[0].HTTP_CODE == 200) 
+				if(data[0].CODE == 200) 
 					window.location.href = "index.html";
 			},
 			complete: function(XMLHttpRequest) {

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,8 +17,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 
 import com.abyeti.db.PGDBConn;
 import com.abyeti.functions.Functions;
@@ -36,36 +35,33 @@ public class Item {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItem(String incomingData) throws Exception {
 		
-		HttpSession session = request.getSession();
 		if(!Functions.isLoggedIn(request)) {
 			System.out.println("Not Logged In");
 			return Response.status(500).entity("Login Required").build();
 		}
 		
 		String returnString = null;
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		
 		try {
-			JSONObject itemData = new JSONObject(incomingData);
-			
+			ObjectMapper mapper = new ObjectMapper();
+			ItemEntry entry = mapper.readValue(incomingData, ItemEntry.class);
 			conn = PGDBConn.dbConnection();
+
 			ps = conn.prepareStatement("INSERT INTO item(itemname,itemdesc,itemprice,username) VALUES(?,?,?,?) ");
-			ps.setString(1, itemData.optString("item_name"));
-			ps.setString(2, itemData.optString("item_desc"));
-			ps.setDouble(3, itemData.optDouble("item_price"));
-			ps.setString(4, (String) session.getAttribute("estore_username"));
+			ps.setString(1, entry.item_name);
+			ps.setString(2, entry.item_desc);
+			ps.setDouble(3, entry.item_price);
+			ps.setString(4, Functions.getLoggedInUsername(request));
 			
 			int http_code = ps.executeUpdate();
-						
+			
+			
 			if( http_code != 0 ) {
-				jsonObject.put("HTTP_CODE", "200");
-				jsonObject.put("MSG", "Item has been entered successfully");
-				returnString = jsonArray.put(jsonObject).toString();
+				String MSG = "Item has been entered successfully";
+				returnString = Functions.createJSONMessage(200, MSG);
 			} else {
-				System.out.println("Invalid");
 				return Response.status(500).entity("Unable to enter Item").build();
 			}
 			
@@ -78,7 +74,8 @@ public class Item {
 		
 		return Response.ok(returnString).build();
 	}
-	
+
+
 	@Path("/all")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -96,7 +93,6 @@ public class Item {
 		
 		String seller = Functions.getLoggedInUsername(request);
 		System.out.println("Session: "+ seller);
-		JSONObject jsObj = new JSONObject();
 		
 		try {
 			conn = PGDBConn.dbConnection();
@@ -105,10 +101,6 @@ public class Item {
 					+ "from item LEFT JOIN transaction "
 					+ "ON item.itemid=transaction.itemid "
 					+ "WHERE username=? GROUP BY item.itemid");
-			/*query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice, COUNT(t.itemid)  "
-					+ "from item i,transaction t "
-					+ "WHERE i.itemid=t.itemid AND i.username=? "
-					+ "GROUP BY i.itemid");*/
 			query.setString(1, seller);
 			
 			ResultSet rs = query.executeQuery();
@@ -116,12 +108,12 @@ public class Item {
 			JSONArray json = new JSONArray();
 			json = converter.toJSONArray(rs);
 			if(json.length()==0) {
-				jsObj.put("CODE", "500");
-				jsObj.put("MSG", "<i>No items exist</i>");
-				json.put(jsObj);
+				String MSG = "<i>No items exist</i>";
+				returnString = Functions.createJSONMessage(500, MSG);
+			} else {
+				returnString = json.toString();
 			}
-			query.close(); //close connection
-			returnString = json.toString();
+			query.close(); 
 			rb = Response.ok(returnString).build();
 		}
 		catch (Exception e) {
@@ -147,8 +139,6 @@ public class Item {
 		Connection conn = null;
 		String returnString = null;
 		Response rb = null;
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();		
 		try {
 			conn = PGDBConn.dbConnection();
 			query = conn.prepareStatement("UPDATE item SET itemdesc=?, itemprice=? WHERE itemid=?");
@@ -159,10 +149,10 @@ public class Item {
 			System.out.println(incomingdata+"\n"+query.toString());
 			query.executeUpdate();
 			
-			jsonObject.put("CODE", "200");
-			jsonObject.put("MSG", "Item has been updated successfully");
+			String MSG = "Item has been updated successfully";
+			returnString = Functions.createJSONMessage(200, MSG);
+
 			query.close(); //close connection
-			returnString = jsonArray.put(jsonObject).toString();
 			
 			rb = Response.ok(returnString).build();
 			
@@ -189,19 +179,16 @@ public class Item {
 		Connection conn = null;
 		String returnString = null;
 		Response rb = null;
-		JSONArray jsonArray = new JSONArray();
-		JSONObject jsonObject = new JSONObject();		
 		try {
 			conn = PGDBConn.dbConnection();
 			query = conn.prepareStatement("DELETE FROM item WHERE itemid=?");
 			query.setInt(1, itemid);
 			
 			query.executeUpdate();
+			query.close(); 
 			
-			jsonObject.put("CODE", "200");
-			jsonObject.put("MSG", "Item has been deleted successfully");
-			query.close(); //close connection
-			returnString = jsonArray.put(jsonObject).toString();
+			String MSG = "Item has been deleted successfully";
+			returnString = Functions.createJSONMessage(200, MSG);
 			
 			rb = Response.ok(returnString).build();
 			
@@ -226,10 +213,6 @@ public class Item {
 		Connection conn = null;
 		String returnString = null;
 		Response rb = null;
-		JSONObject jsObj = new JSONObject();
-		HttpSession session = request.getSession();
-		
-		System.out.println("Session: "+ session.getAttribute("estore_username"));
 		
 		try {
 			conn = PGDBConn.dbConnection();
@@ -241,12 +224,12 @@ public class Item {
 			
 			json = converter.toJSONArray(rs);
 			if(json.length()==0) {
-				jsObj.put("CODE", "500");
-				jsObj.put("MSG", "<i>No items exist</i>");
-				json.put(jsObj);
+				String MSG = "<i>No items exist</i>";
+				returnString = Functions.createJSONMessage(200, MSG);
 			}
-			query.close(); //close connection
-			returnString = json.toString();
+			else 
+				returnString = json.toString();
+			query.close(); 
 			rb = Response.ok(returnString).build();
 		}
 		catch (Exception e) {
@@ -259,5 +242,11 @@ public class Item {
 		return rb;
 	}
 	
-	
 }
+
+class ItemEntry {
+	public String item_name;
+	public String item_desc;
+	public double item_price;
+}
+
