@@ -21,14 +21,20 @@
 <body data-ng-app="estoreApp">
 	<div data-ng-include='"templates/header.html"'></div>
 	<div class="container">
-		<div class="col-md-6">
+		<div class="col-md-6 mycontent-left">
 			<h3>Items in eStore</h3>
 			<div id="get_inventory" >
 				<table class='table table-hover' data-ng-controller='ItemsController'>
+					<tr>
+						<th>Item Name</th>
+						<th>Item Price</th>
+						<th></th>
+					</tr>
 					<tr data-ng-repeat="x in items">
 						<td class="itemname">{{x.itemname}}</td>
 						<td class="itemdesc hidden">{{x.itemdesc}}</td>
 						<td class="itemprice">&#8377;{{x.itemprice}}</td>
+						<td class="quantity hidden">{{x.quantity}}</td>
 						<td><button class="viewItem btn btn-default" value="{{x.itemid}}" type="button">View</button></td>
 					</tr>					
 				</table>
@@ -37,14 +43,15 @@
 		</div>
 		<div class="col-md-6">
 			<h3 id="item_name"></h3>
-			<pre id="item_desc" ></pre>
+			<pre id="pre_item_desc" ></pre>
 			<div id="item_price" ></div>
 			<form id="buy_item" name="buy_item" action="#">
 				<input type="hidden" id="item_id" name="item_id" value="" />
 			</form>
+			<br/>
+			<div id="update_response" class="container"></div>
 		</div>
 	</div>
-	<div id="update_response" class="container"></div>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="js/script.js"></script>

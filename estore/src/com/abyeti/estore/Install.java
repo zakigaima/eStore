@@ -74,17 +74,15 @@ public class Install {
 		
 		String tbl_item = "CREATE TABLE item ("
 				+ "itemid serial NOT NULL, itemname text, itemdesc text, "
-				+ "itemprice double precision, username text, "
+				+ "itemprice double precision, username text, quantity integer, "
 				+ "CONSTRAINT item_pkey PRIMARY KEY (itemid), "
 				+ "CONSTRAINT item_username_fkey FOREIGN KEY (username) "
 				+ "REFERENCES users (username) MATCH SIMPLE "
 				+ "ON UPDATE NO ACTION ON DELETE NO ACTION)";
 		String tbl_transaction ="CREATE TABLE transaction ( "
-				+ "trans_id serial NOT NULL, itemid integer, buyername text, sellername text, "
+				+ "trans_id serial NOT NULL, itemid integer, buyername text, "
 				+ "CONSTRAINT transaction_pkey PRIMARY KEY (trans_id), "
 				+ "CONSTRAINT transaction_buyername_fkey FOREIGN KEY (buyername) "
-				+ "REFERENCES users (username) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, "
-				+ "CONSTRAINT transaction_sellername_fkey FOREIGN KEY (sellername) "
 				+ "REFERENCES users (username) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION)";
 		
 		

@@ -52,42 +52,39 @@ public class Transaction {
 			returnString = "User Should be logged in for this request";
 			return Response.ok(returnString).build();
 		}
-		Connection conn = null;
-		PreparedStatement ps = null;
-		
-		try {
-			
-			conn = PGDBConn.dbConnection();
-			
-			PreparedStatement query = conn.prepareStatement("SELECT username FROM item WHERE itemid=?");
-			query.setInt(1, itemid);
-			ResultSet rs = query.executeQuery();
-			rs.next();
-			String seller = rs.getString("username");
-			
-			ps = conn.prepareStatement("INSERT INTO transaction(itemid,buyername,sellername) VALUES(?,?,?) ");
-			ps.setInt(1, itemid);
-			ps.setString(2, Functions.getLoggedInUsername(request));
-			ps.setString(3, seller);
-			
-			int http_code = ps.executeUpdate();
-			
-			int CODE;
-			String MSG;
-			if( http_code != 0 ) {
-				CODE = 200;
-				MSG = "Thanks for Buying";
-			} else {
-				CODE = 500;
-				MSG = "Error in the Transaction";
-			}
-			returnString = Functions.createJSONMessage(CODE, MSG);
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-			return Response.status(500).entity("Server was not able to process your request").build();
+		int CODE;
+		String MSG;
+		if(Functions.getItemQuantity(itemid)==0) {
+			CODE = 500;
+			MSG = "<i class='text-danger'>Sorry, Item out of Stock</i>";
 		}
-		
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			
+			try {
+				conn = PGDBConn.dbConnection();
+				ps = conn.prepareStatement("INSERT INTO transaction(itemid,buyername) VALUES(?,?) ");
+				ps.setInt(1, itemid);
+				ps.setString(2, Functions.getLoggedInUsername(request));
+				
+				int http_code = ps.executeUpdate();
+				
+				if( http_code != 0 ) {
+					Functions.updateQuantity(itemid);
+					CODE = 200;
+					MSG = "Thanks for Buying";
+				} else {
+					CODE = 500;
+					MSG = "Error in the Transaction";
+				}
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+				return Response.status(500).entity("Server was not able to process your request").build();
+			}
+		}
+		returnString = Functions.createJSONMessage(CODE, MSG);
 		return Response.ok(returnString).build();
 	}
 	
@@ -161,19 +158,19 @@ public class Transaction {
 			returnString = "User Should be logged in for this request";
 			return Response.ok(returnString).build();
 		}
-		String seller = Functions.getLoggedInUsername(request);
+		String buyer = Functions.getLoggedInUsername(request);
 		
 		try {
 			conn = PGDBConn.dbConnection();
 			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,username from item i,transaction t WHERE i.itemid=t.itemid AND t.buyername=?");
-			query.setString(1, seller);
+			query.setString(1, buyer);
 			
 			ResultSet rs = query.executeQuery();
 			
 			ToJSON converter = new ToJSON();
 			JSONArray json = new JSONArray();
 			
-			json = converter.toJSONArray(rs);
+			json = converter.toJSONArray(rs); 
 
 			if(json.length()==0) 
 				returnString = Functions.createJSONMessage(500, "<i>No items exist</i>");

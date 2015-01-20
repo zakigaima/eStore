@@ -43,7 +43,7 @@ $(document).ready(function() {
 			},
 			success: function(data) { 
 				//console.log(data);
-				if(data[0].HTTP_CODE == 200) {
+				if(data[0].CODE == 200) {
 					$('#div_ajaxResponse').text( data[0].MSG );
 					window.location.href = "login.html";
 				}

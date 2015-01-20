@@ -1,11 +1,17 @@
 package com.abyeti.functions;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+
+import com.abyeti.db.PGDBConn;
 
 /**
  * 
@@ -45,7 +51,7 @@ public class Functions {
 	 * 
 	 * @param CODE
 	 * @param MSG
-	 * @return
+	 * @return 
 	 * @throws JSONException
 	 */
 	public static String createJSONMessage(int CODE, String MSG) throws JSONException {
@@ -54,6 +60,47 @@ public class Functions {
 		jsonObject.put("CODE", CODE);
 		jsonObject.put("MSG", MSG);
 		return jsonArray.put(jsonObject).toString();
+	}
+	
+	public static int getItemQuantity(int itemid) throws Exception {
+		PreparedStatement ps = null;
+		Connection conn = null;
+		int qty = 0;
+		try {
+			conn = PGDBConn.dbConnection();
+			ps = conn.prepareStatement("SELECT quantity FROM item WHERE itemid = ?");
+			ps.setInt(1, itemid);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			qty = rs.getInt("quantity");
+			rs.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(conn!=null) conn.close();
+		}
+		return qty;
+	}
+	
+	public static boolean updateQuantity(int itemid) throws Exception {
+		PreparedStatement ps = null;
+		Connection conn = null;
+		try {
+			conn = PGDBConn.dbConnection();
+			int quantity = getItemQuantity(itemid);
+			if(quantity == 0) {
+				return false;
+			}
+			ps = conn.prepareStatement("UPDATE item SET quantity = quantity - 1 WHERE itemid = ?");
+			ps.setInt(1, itemid);
+			ps.executeUpdate();
+			
+		} catch(Exception e) {
+			
+		} finally {
+			if(conn!=null) conn.close();
+		}
+		return true;
 	}
 	
 }

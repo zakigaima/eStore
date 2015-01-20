@@ -25,7 +25,7 @@ public class ToJSON {
 	 * being used is properly encoding.
 	 * 
 	 * varchar is currently the only dataType that is being encode by ESAPI
-	 * 
+	 *  
 	 * @param rs - database ResultSet
 	 * @return - JSON array
 	 * @throws Exception

@@ -71,11 +71,12 @@ public class Item {
 			ItemEntry entry = mapper.readValue(incomingData, ItemEntry.class);
 			conn = PGDBConn.dbConnection();
 
-			ps = conn.prepareStatement("INSERT INTO item(itemname,itemdesc,itemprice,username) VALUES(?,?,?,?) ");
+			ps = conn.prepareStatement("INSERT INTO item(itemname,itemdesc,itemprice,username,quantity) VALUES(?,?,?,?,?) ");
 			ps.setString(1, entry.item_name);
 			ps.setString(2, entry.item_desc);
 			ps.setDouble(3, entry.item_price);
 			ps.setString(4, Functions.getLoggedInUsername(request)); //getting Logged in Username
+			ps.setInt(5, entry.quantity);
 			
 			int http_code = ps.executeUpdate();
 			
@@ -130,7 +131,7 @@ public class Item {
 		
 		try {
 			conn = PGDBConn.dbConnection();
-			query = conn.prepareStatement("select item.itemid,itemname,itemdesc,itemprice, "
+			query = conn.prepareStatement("select item.itemid,itemname,itemdesc,itemprice, quantity, "
 					+ "COUNT(transaction.itemid) "
 					+ "from item LEFT JOIN transaction "
 					+ "ON item.itemid=transaction.itemid "
@@ -174,13 +175,14 @@ public class Item {
 	 * @throws Exception
 	 */
 	
-	@Path("/{itemid}/{itemdesc}/{itemprice}")
+	@Path("/{itemid}/{itemdesc}/{itemprice}/{quantity}")
 	@PUT
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response UpdateItems(@PathParam("itemid") int itemid, 
 								@PathParam("itemdesc") String itemdesc,
 								@PathParam("itemprice") double itemprice, 
+								@PathParam("quantity") int quantity, 
 								String incomingdata) throws Exception {
 		
 		PreparedStatement query = null;
@@ -189,10 +191,11 @@ public class Item {
 		Response rb = null;
 		try {
 			conn = PGDBConn.dbConnection();
-			query = conn.prepareStatement("UPDATE item SET itemdesc=?, itemprice=? WHERE itemid=?");
+			query = conn.prepareStatement("UPDATE item SET itemdesc=?, itemprice=?, quantity=? WHERE itemid=?");
 			query.setString(1, itemdesc);
 			query.setDouble(2, itemprice);
-			query.setInt(3, itemid);
+			query.setInt(3, quantity);
+			query.setInt(4, itemid);
 			
 			System.out.println(incomingdata+"\n"+query.toString());
 			query.executeUpdate();
@@ -282,7 +285,7 @@ public class Item {
 		
 		try {
 			conn = PGDBConn.dbConnection();
-			query = conn.prepareStatement("select itemid,itemname,itemdesc,itemprice from item");
+			query = conn.prepareStatement("select itemid,itemname,itemdesc,itemprice,quantity from item");
 			
 			ResultSet rs = query.executeQuery();
 			ToJSON converter = new ToJSON();
@@ -321,4 +324,5 @@ class ItemEntry {
 	public String item_name;
 	public String item_desc;
 	public double item_price;
+	public int quantity;
 }

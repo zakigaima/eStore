@@ -1,4 +1,4 @@
-var getItemsController = {};
+/*var getItemsController = {};
 getItemsController.MyItemsController = function ($scope,$http) {
 	$http.get("http://localhost:8080/estore/api/item/all").success( function(response) {
 		if(response[0].CODE==500) 
@@ -8,16 +8,18 @@ getItemsController.MyItemsController = function ($scope,$http) {
 	 });
 };
 estoreApp.controller(getItemsController);
-/*estoreApp.controller('MyItemsController',function MyItemsController($scope,$http) {
+*/
+function MyItemsController($scope,$http) {
 	$http.get("http://localhost:8080/estore/api/item/all").success( function(response) {
 		if(response[0].CODE==500) 
 			$('#status').html(response[0].MSG);
 		else
 			$scope.myitems = response;
 	 });
-});*/
+}
 $(document).ready(function() {
-
+	
+//	MyItemsController($scope, $http);
 	var $update_form = $('#update_form');
 	$update_form.hide();
 		
@@ -29,12 +31,14 @@ $(document).ready(function() {
 			, itemid = $tr.find('.itemid').text()
 			, itemname = $tr.find('.itemname').text()
 			, itemdesc = $tr.find('.itemdesc').text()
-			, itemprice = $tr.find('.itemprice').text();
+			, itemprice = $tr.find('.itemprice').text()
+			, quantity = $tr.find('.quantity').text();
 		
 		$('#form_itemid').val(itemid);
 		$('#form_itemname').text(itemname);
 		$('#form_itemdesc').text(itemdesc);
 		$('#form_itemprice').val(itemprice);
+		$('#form_quantity').val(quantity);
 		
 		$('#update_response').text("");
 	});
@@ -45,9 +49,10 @@ $(document).ready(function() {
 		var obj = $update_form.serializeObject()
 			, id = $('#form_itemid').val()
 			, desc = $('#form_itemdesc').val()
-			, price = $('#form_itemprice').val();
+			, price = $('#form_itemprice').val()
+			, qty = $('#form_quantity').val();
 		
-		updateItem(obj, id, desc, price);
+		updateItem(obj, id, desc, price, qty);
 	});
 	
 	$(document.body).on('click', '.remove', function(e) {
@@ -60,23 +65,26 @@ $(document).ready(function() {
 	});
 });
 
-function updateItem(obj, id, desc, price) {
+estoreApp.controller('MyItemsController',MyItemsController);
+
+
+function updateItem(obj, id, desc, price, qty) {
 	console.log(JSON.stringify(obj));
 	ajaxObj = {  
 			type: "PUT",
-			url: "http://localhost:8080/estore/api/item/" + id + "/" + desc + "/" + price,
+			url: "http://localhost:8080/estore/api/item/" + id + "/" + desc + "/" + price + "/" + qty,
 			data: JSON.stringify(obj), 
 			contentType:"application/json",
-			error: function(jqXHR, textStatus, errorThrown) {
+			error: function(data, jqXHR, textStatus, errorThrown) {
 				console.log(jqXHR.responseText);
+				$('#update_response').text( data );
 			},
 			success: function(data) {
-				//console.log(data);
 				$('#update_response').text( data[0].MSG );
+				location.reload();
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-				estoreApp.controller(getItemsController);
 			}, 
 			dataType: "json" //request JSON
 		};
@@ -95,6 +103,7 @@ function deleteItem(id) {
 			success: function(data) {
 				//console.log(data);
 				$('#delete_response').text( data[0].MSG );
+				location.reload();
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );

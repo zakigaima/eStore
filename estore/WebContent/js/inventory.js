@@ -18,14 +18,17 @@ $(document).ready(function() {
 			, $tr = $this.closest('tr')
 			, itemname = $tr.find('.itemname').text()
 			, itemdesc = $tr.find('.itemdesc').text()
-			, itemprice = $tr.find('.itemprice').text();
+			, itemprice = $tr.find('.itemprice').text()
+			, quantity = $tr.find('.quantity').text();
 		
 		$('#item_name').text(itemname);
 		$('#item_desc').text(itemdesc);
 		$('#item_price').text(itemprice);
 		
 		$('#update_response').text("");
-		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' value='Buy Now' class='btn btn-primary'/>");
+		btn_text = (quantity==0)?"Out of Stock":"Buy Now";
+		btn_class = (quantity==0)?"btn-default":"btn-primary";
+		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' value='"+btn_text+"' class='btn "+btn_class+"'/>");
 	});
 	
 	$inventory.submit(function(e) {
@@ -47,11 +50,11 @@ function buyItem(obj,itemid) {
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log(jqXHR.responseText);
-				$('#update_response').text( "Error" );
+				$('#update_response').html( "Error" );
 			},
 			success: function(data) {
 				//console.log(data);
-				$('#update_response').text( data[0].MSG );
+				$('#update_response').html( data[0].MSG );
 			},
 			dataType: "json" //request JSON
 		};
