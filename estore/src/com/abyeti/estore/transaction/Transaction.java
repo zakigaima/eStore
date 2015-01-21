@@ -3,6 +3,9 @@ package com.abyeti.estore.transaction;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -61,12 +64,14 @@ public class Transaction {
 		else {
 			Connection conn = null;
 			PreparedStatement ps = null;
-			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = new Date();			
 			try {
 				conn = PGDBConn.dbConnection();
-				ps = conn.prepareStatement("INSERT INTO transaction(itemid,buyername) VALUES(?,?) ");
+				ps = conn.prepareStatement("INSERT INTO transaction(itemid,buyername,txndate) VALUES(?,?,?) ");
 				ps.setInt(1, itemid);
 				ps.setString(2, Functions.getLoggedInUsername(request));
+				ps.setString(3, dateFormat.format(date));
 				
 				int http_code = ps.executeUpdate();
 				
@@ -110,7 +115,7 @@ public class Transaction {
 		
 		try {
 			conn = PGDBConn.dbConnection();
-			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,t.buyername from item i,transaction t WHERE i.itemid=t.itemid AND i.username=?");
+			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,t.buyername,t.txndate from item i,transaction t WHERE i.itemid=t.itemid AND i.username=?");
 			query.setString(1, seller);
 			
 			ResultSet rs = query.executeQuery();
@@ -162,7 +167,7 @@ public class Transaction {
 		
 		try {
 			conn = PGDBConn.dbConnection();
-			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,username from item i,transaction t WHERE i.itemid=t.itemid AND t.buyername=?");
+			query = conn.prepareStatement("select i.itemid,itemname,itemdesc,itemprice,username,t.txndate from item i,transaction t WHERE i.itemid=t.itemid AND t.buyername=?");
 			query.setString(1, buyer);
 			
 			ResultSet rs = query.executeQuery();

@@ -29,12 +29,14 @@
 			<div id="get_sales">
 				<table class='table table-hover' data-ng-controller='SalesController'>
 					<tr>
+						<th>Date</th>
 						<th>Item</th>
 						<th>Description</th>
 						<th>Price</th>
 						<th>Buyer</th>
 					</tr>
 					<tr data-ng-repeat="x in sales">
+						<td>{{x.txndate}}</td>
 						<td>{{x.itemname}}</td>
 						<td>{{x.itemdesc}}</td>
 						<td>&#8377;{{x.itemprice}}</td>

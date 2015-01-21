@@ -22,7 +22,7 @@ $(document).ready(function() {
 			, quantity = $tr.find('.quantity').text();
 		
 		$('#item_name').text(itemname);
-		$('#item_desc').text(itemdesc);
+		$('#pre_item_desc').text(itemdesc);
 		$('#item_price').text(itemprice);
 		
 		$('#update_response').text("");
