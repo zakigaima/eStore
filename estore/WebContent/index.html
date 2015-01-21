@@ -24,13 +24,17 @@
 		<div class="col-md-6 mycontent-left">
 			<h3>Items in eStore</h3>
 			<div id="get_inventory" >
+				<div class="form-group has-feedback">
+				    <input type="text" class="form-control" data-ng-model="search" placeholder="Search"/>
+				    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+				</div>
 				<table class='table table-hover' data-ng-controller='ItemsController'>
 					<tr>
 						<th>Item Name</th>
 						<th>Item Price</th>
 						<th></th>
 					</tr>
-					<tr data-ng-repeat="x in items">
+					<tr data-ng-repeat="x in items | filter:search | orderBy:'-itemname'">
 						<td class="itemname">{{x.itemname}}</td>
 						<td class="itemdesc hidden">{{x.itemdesc}}</td>
 						<td class="itemprice">&#8377;{{x.itemprice}}</td>

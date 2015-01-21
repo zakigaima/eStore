@@ -70,21 +70,27 @@ estoreApp.controller('MyItemsController',MyItemsController);
 
 function updateItem(obj, id, desc, price, qty) {
 	console.log(JSON.stringify(obj));
+	$('#btn_update').removeClass('btn-default');
+	$('#btn_update').addClass('btn-warning');
+	$('#btn_update_span').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate');
 	ajaxObj = {  
 			type: "PUT",
 			url: "http://localhost:8080/estore/api/item/" + id + "/" + desc + "/" + price + "/" + qty,
 			data: JSON.stringify(obj), 
 			contentType:"application/json",
 			error: function(data, jqXHR, textStatus, errorThrown) {
-				console.log(jqXHR.responseText);
+				console.log("Coming from Log: "+jqXHR.responseText);
 				$('#update_response').text( data );
 			},
 			success: function(data) {
 				$('#update_response').text( data[0].MSG );
-				location.reload();
+				//location.reload();
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );
+				$('#btn_update').addClass('btn-default');
+				$('#btn_update').removeClass('btn-warning');
+				$('#btn_update_span').removeClass('glyphicon glyphicon-refresh glyphicon-refresh-animate');
 			}, 
 			dataType: "json" //request JSON
 		};
@@ -112,7 +118,8 @@ function deleteItem(id) {
 			dataType: "json" //request JSON
 		};
 		
-	return $.ajax(ajaxObj);
+	$.ajax(ajaxObj);
+
 }
 
 

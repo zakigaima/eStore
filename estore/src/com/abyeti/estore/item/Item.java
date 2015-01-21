@@ -185,6 +185,7 @@ public class Item {
 								@PathParam("quantity") int quantity, 
 								String incomingdata) throws Exception {
 		
+		Thread.sleep(5000);
 		PreparedStatement query = null;
 		Connection conn = null;
 		String returnString = null;
