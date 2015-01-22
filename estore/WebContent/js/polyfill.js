@@ -9,6 +9,7 @@
 	{
 		var o = {};
 		var a = this.serializeArray();
+		console.log("Hi:"+a);
 		$.each(a, function() {
 			if (o[this.name] !== undefined) {
 				if (!o[this.name].push) {

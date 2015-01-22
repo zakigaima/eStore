@@ -66,7 +66,7 @@ public class User {
 	 */
 	@Path("/logout")
 	@GET
-	public void LogOut() throws Exception {
+	public void LogOut() {
 		HttpSession session = request.getSession();
 		session.invalidate();
 	}
@@ -98,7 +98,8 @@ public class User {
 			
 			ObjectMapper mapper = new ObjectMapper();
 			UserEntry entry = mapper.readValue(incomingData, UserEntry.class);
-			
+			System.out.println("username: "+entry.username);
+			System.out.println("password: "+entry.username);
 			conn = PGDBConn.dbConnection();
 			ps = conn.prepareStatement("SELECT username,password FROM users WHERE username=? AND PASSWORD=? ");
 			ps.setString(1, entry.username);

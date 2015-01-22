@@ -11,8 +11,8 @@ $(document).ready(function() {
 			success: function(data) { 
 				//console.log(data);
 				if(data[0].CODE == 500) {
-					$('#loggedInMsg').html("You are not logged in, Please login");
-					$('#add_item').hide();
+					$('#newitem_loggedInMsg').html("You are not logged in, Please login");
+					$('#newitem_add_item').hide();
 				}
 			},
 			//complete: function(XMLHttpRequest) {
@@ -23,9 +23,9 @@ $(document).ready(function() {
 	$.ajax(ajaxObj);		
 	
 	
-	var $add_item = $('#add_item');
+	var $add_item = $('#newitem_add_item');
 		
-	$('#submit_it').click(function(e) {
+	$('#newitem_submit_it').click(function(e) {
 		//console.log("submit button has been clicked");
 		e.preventDefault(); //cancel form submit
 		
@@ -41,13 +41,13 @@ $(document).ready(function() {
 			contentType:"application/json",
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log("Error " + jqXHR.getAllResponseHeaders() + " " + errorThrown);
-				$('#div_ajaxResponse').text( "Error" );
+				$('#newitem_div_ajaxResponse').text( "Error" );
 			},
 			success: function(data) { 
 				console.log(data);
 				
 				if(data[0].CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
+					$('#newitem_div_ajaxResponse').text( data[0].MSG );
 					setTimeout( function() { window.location.href="http://localhost:8080/estore/"; }, 200);		
 				}
 			},

@@ -1,56 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="ISO-8859-1">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Sell an Item</title>
-
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-
-	<script src="js/jquery-min.js"></script>
-	<script src="js/newitem.js"></script>
-	<script src="js/polyfill.js"></script>
-    <link href="css/style.css" rel="stylesheet">
-	<script src="js/angular.min.js" type="text/javascript"></script>
-	<script src="js/angular-route.min.js" type="text/javascript"></script>
-	<script src="js/script.js"></script>
-
-</head>
-<body data-ng-app="estoreApp">
-	<div data-ng-include='"templates/header.html"'></div>
-
 	<div class="container">
 		<div class="col-md-6">
 			<h3>New Item</h3>
-			<h4 id="loggedInMsg"></h4>
-			<form id="add_item" name="add_item" action="#">
+			<h4 id="newitem_loggedInMsg"></h4>
+			<form id="newitem_add_item" name="add_item" action="#">
 				<div class="form-group">
 					<br/>
 					<label>Item Name</label>
-					<input type="text" name="item_name" id="item_name" maxlength="50" class="form-control" />
+					<input type="text" name="item_name" id="newitem_item_name" maxlength="50" class="form-control" />
 					<br/>
 					<label>Item Description</label>
-					<textarea name="item_desc" id="item_desc" class="form-control" ></textarea>
+					<textarea name="item_desc" id="newitem_item_desc" class="form-control" ></textarea>
 					<br/>
 					<label>Price</label>
-					<input type="text" name="item_price" id="item_price" maxlength="10" class="form-control" />
+					<input type="text" name="item_price" id="newitem_item_price" maxlength="10" class="form-control" />
 					<br/>
 					<label>Quantity</label>
-					<input type="text" name="quantity" id="quantity" maxlength="4" class="form-control" value="5"/>
+					<input type="text" name="quantity" id="newitem_quantity" maxlength="4" class="form-control" value="5"/>
 					<br/>
-					<input type="button" name="submit_it" id="submit_it" value="Submit" class="form-control btn btn-primary"> 
+					<input type="button" name="submit_it" id="newitem_submit_it" value="Submit" class="form-control btn btn-primary"> 
 				</div>
 			</form>
 		</div>
 		<br />
 	</div>
-	<div id="div_ajaxResponse" class="container"></div>
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-</body>
-</html>
+	<div id="newitem_div_ajaxResponse" class="container"></div>

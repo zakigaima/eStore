@@ -1,0 +1,36 @@
+	<div class="container">
+		<div class="col-md-6 mycontent-left">
+			<h3>Items in eStore</h3>
+			<div id="index_get_inventory" >
+				<div class="form-group has-feedback">
+				    <input type="text" class="form-control" data-ng-model="search" placeholder="Search"/>
+				    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+				</div>
+				<table class='table table-hover' data-ng-controller='ItemsController'>
+					<tr>
+						<th>Item Name</th>
+						<th>Item Price</th>
+						<th></th>
+					</tr>
+					<tr data-ng-repeat="x in items | filter:search | orderBy:'-itemname'">
+						<td class="itemname">{{x.itemname}}</td>
+						<td class="itemdesc hidden">{{x.itemdesc}}</td>
+						<td class="itemprice">&#8377;{{x.itemprice}}</td>
+						<td class="quantity hidden">{{x.quantity}}</td>
+						<td><button class="viewItem btn btn-default" value="{{x.itemid}}" type="button">View</button></td>
+					</tr>					
+				</table>
+			</div>
+			<div id="index_status" ></div>
+		</div>
+		<div class="col-md-6">
+			<h3 id="index_item_name"></h3>
+			<pre id="index_pre_item_desc" ></pre>
+			<div id="index_item_price" ></div>
+			<form id="index_buy_item" name="buy_item" action="#">
+				<input type="hidden" id="index_item_id" name="item_id" value="" />
+			</form>
+			<br/>
+			<div id="index_update_response" class="container"></div>
+		</div>
+	</div>

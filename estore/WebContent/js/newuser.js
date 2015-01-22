@@ -10,8 +10,8 @@ $(document).ready(function() {
 			success: function(data) { 
 				//console.log(data);
 				if(data[0].CODE == 200) {
-					$('#loggedInMsg').html("You've already logged In");
-					$('#add_user').hide();
+					$('#newuser_loggedInMsg').html("You've already logged In");
+					$('#newuser_add_user').hide();
 				}
 			},
 			//complete: function(XMLHttpRequest) {
@@ -22,9 +22,9 @@ $(document).ready(function() {
 	$.ajax(ajaxObj);		
 
 	
-	var $post_example = $('#add_user');
+	var $post_example = $('#newuser_add_user');
 		
-	$('#submit_it').click(function(e) {
+	$('#newuser_submit_it').click(function(e) {
 		//console.log("submit button has been clicked");
 		e.preventDefault(); //cancel form submit
 		
@@ -44,7 +44,7 @@ $(document).ready(function() {
 			success: function(data) { 
 				//console.log(data);
 				if(data[0].CODE == 200) {
-					$('#div_ajaxResponse').text( data[0].MSG );
+					$('#newuser_div_ajaxResponse').text( data[0].MSG );
 					window.location.href = "login.html";
 				}
 			},

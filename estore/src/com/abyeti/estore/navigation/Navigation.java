@@ -59,14 +59,14 @@ public class Navigation {
 		JSONArray jsonArray = new JSONArray();
 		String returnString = "";
 		if(Functions.isLoggedIn(request)) { //if user is logged in 
-			jsonArray.put(createJSONObject("items.html", "", "My Items"));
-			jsonArray.put(createJSONObject("newitem.html", "", "Sell an Item"));
-			jsonArray.put(createJSONObject("sales.html", "", "My Sales"));
-			jsonArray.put(createJSONObject("purchases.html", "", "My Purchases"));
+			jsonArray.put(createJSONObject("#/items", "", "My Items"));
+			jsonArray.put(createJSONObject("#/newitem", "", "Sell an Item"));
+			jsonArray.put(createJSONObject("#/sales", "", "My Sales"));
+			jsonArray.put(createJSONObject("#/purchases", "", "My Purchases"));
 			jsonArray.put(createJSONObject("", "logout", "Logout"));
 		} else {
-			jsonArray.put(createJSONObject("login.html", "", "Login"));
-			jsonArray.put(createJSONObject("newuser.html", "", "Register"));
+			jsonArray.put(createJSONObject("#/login", "", "Login"));
+			jsonArray.put(createJSONObject("#/newuser", "", "Register"));
 		}
 		returnString = jsonArray.toString();
 		return Response.ok(returnString).build();

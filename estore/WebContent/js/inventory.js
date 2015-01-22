@@ -1,7 +1,7 @@
 estoreApp.controller('ItemsController',function($scope,$http) {
 	$http.get("http://localhost:8080/estore/api/item/inventory").success( function(response) {
 		if(response[0].CODE==500)
-			$('#status').html(response[0].MSG);
+			$('#index_status').html(response[0].MSG);
 		else 
 			$scope.items = response;
 	 });
@@ -9,7 +9,7 @@ estoreApp.controller('ItemsController',function($scope,$http) {
 
 $(document).ready(function() {
 	
-	var $inventory = $('#buy_item');
+	var $inventory = $('#index_buy_item');
 		
 	$(document.body).on('click', ':button, .viewItem', function(e) {
 		//console.log(this);
@@ -21,14 +21,14 @@ $(document).ready(function() {
 			, itemprice = $tr.find('.itemprice').text()
 			, quantity = $tr.find('.quantity').text();
 		
-		$('#item_name').text(itemname);
-		$('#pre_item_desc').text(itemdesc);
-		$('#item_price').text(itemprice);
+		$('#index_item_name').text(itemname);
+		$('#index_pre_item_desc').text(itemdesc);
+		$('#index_item_price').text(itemprice);
 		
-		$('#update_response').text("");
+		$('#index_update_response').text("");
 		btn_text = (quantity==0)?"Out of Stock":"Buy Now";
 		btn_class = (quantity==0)?"btn-default":"btn-primary";
-		$('#buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' value='"+btn_text+"' class='btn "+btn_class+"'/>");
+		$('#index_buy_item').html("<input type='hidden' id='item_id' value='"+ itemid +"' /><input type='submit' id='submit_it' value='"+btn_text+"' class='btn "+btn_class+"'/>");
 	});
 	
 	$inventory.submit(function(e) {
@@ -79,7 +79,7 @@ function buyItem(obj,itemid) {
 				//console.log(data);
 				var html_string = "";
 				if(data[0].CODE==500) {
-					$('#status').html(data[0].MSG);
+					$('#index_status').html(data[0].MSG);
 				}
 				else {
 					$.each(data, function(index1, val1) {
@@ -87,7 +87,7 @@ function buyItem(obj,itemid) {
 						html_string = html_string + templateGetInventory(val1);
 					});
 					
-					$('#get_inventory').html("<table class='table table-hover'>" +
+					$('#index_get_inventory').html("<table class='table table-hover'>" +
 											"<tbody><tr><th>Item</th><th>Price</th><th></th></tr>"+ html_string + "</tbody></table>");
 				}
 			},
@@ -104,7 +104,7 @@ function templateGetInventory(param) {
 	return '<tr>' +
 				'<td class="itemname">' + param.itemname + '</td>' +
 				'<td class="itemdesc hidden">' + param.itemdesc + '</td>' +
-				'<td class="itemprice">&#8377;' + param.itemprice + '</td>' +
+				'<td class="itemprice">&#index_8377;' + param.itemprice + '</td>' +
 				'<td><button class="viewItem btn btn-default" value="' + param.itemid + '" type="button">View</button></td>'+
 			'</tr>';
 }

@@ -2,7 +2,7 @@
 getItemsController.MyItemsController = function ($scope,$http) {
 	$http.get("http://localhost:8080/estore/api/item/all").success( function(response) {
 		if(response[0].CODE==500) 
-			$('#status').html(response[0].MSG);
+			$('#items_status').html(response[0].MSG);
 		else
 			$scope.myitems = response;
 	 });
@@ -12,7 +12,7 @@ estoreApp.controller(getItemsController);
 function MyItemsController($scope,$http) {
 	$http.get("http://localhost:8080/estore/api/item/all").success( function(response) {
 		if(response[0].CODE==500) 
-			$('#status').html(response[0].MSG);
+			$('#items_status').html(response[0].MSG);
 		else
 			$scope.myitems = response;
 	 });
@@ -20,7 +20,7 @@ function MyItemsController($scope,$http) {
 $(document).ready(function() {
 	
 //	MyItemsController($scope, $http);
-	var $update_form = $('#update_form');
+	var $update_form = $('#items_update_form');
 	$update_form.hide();
 		
 	$(document.body).on('click', '.edit', function(e) {
@@ -34,23 +34,23 @@ $(document).ready(function() {
 			, itemprice = $tr.find('.itemprice').text()
 			, quantity = $tr.find('.quantity').text();
 		
-		$('#form_itemid').val(itemid);
-		$('#form_itemname').text(itemname);
-		$('#form_itemdesc').text(itemdesc);
-		$('#form_itemprice').val(itemprice);
-		$('#form_quantity').val(quantity);
+		$('#items_form_itemid').val(itemid);
+		$('#items_form_itemname').text(itemname);
+		$('#items_form_itemdesc').text(itemdesc);
+		$('#items_form_itemprice').val(itemprice);
+		$('#items_form_quantity').val(quantity);
 		
-		$('#update_response').text("");
+		$('#items_update_response').text("");
 	});
 	
 	$update_form.submit(function(e) {
 		e.preventDefault(); //cancel form submit
 		
 		var obj = $update_form.serializeObject()
-			, id = $('#form_itemid').val()
-			, desc = $('#form_itemdesc').val()
-			, price = $('#form_itemprice').val()
-			, qty = $('#form_quantity').val();
+			, id = $('#items_form_itemid').val()
+			, desc = $('#items_form_itemdesc').val()
+			, price = $('#items_form_itemprice').val()
+			, qty = $('#items_form_quantity').val();
 		
 		updateItem(obj, id, desc, price, qty);
 	});
@@ -70,9 +70,9 @@ estoreApp.controller('MyItemsController',MyItemsController);
 
 function updateItem(obj, id, desc, price, qty) {
 	console.log(JSON.stringify(obj));
-	$('#btn_update').removeClass('btn-default');
-	$('#btn_update').addClass('btn-warning');
-	$('#btn_update_span').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate');
+	$('#items_btn_update').removeClass('btn-default');
+	$('#items_btn_update').addClass('btn-warning');
+	$('#items_btn_update_span').addClass('glyphicon glyphicon-refresh glyphicon-refresh-animate');
 	ajaxObj = {  
 			type: "PUT",
 			url: "http://localhost:8080/estore/api/item/" + id + "/" + desc + "/" + price + "/" + qty,
@@ -80,17 +80,17 @@ function updateItem(obj, id, desc, price, qty) {
 			contentType:"application/json",
 			error: function(data, jqXHR, textStatus, errorThrown) {
 				console.log("Coming from Log: "+jqXHR.responseText);
-				$('#update_response').text( data );
+				$('#items_update_response').text( data );
 			},
 			success: function(data) {
-				$('#update_response').text( data[0].MSG );
+				$('#items_update_response').text( data[0].MSG );
 				//location.reload();
 			},
 			complete: function(XMLHttpRequest) {
 				//console.log( XMLHttpRequest.getAllResponseHeaders() );
-				$('#btn_update').addClass('btn-default');
-				$('#btn_update').removeClass('btn-warning');
-				$('#btn_update_span').removeClass('glyphicon glyphicon-refresh glyphicon-refresh-animate');
+				$('#items_btn_update').addClass('btn-default');
+				$('#items_btn_update').removeClass('btn-warning');
+				$('#items_btn_update_span').removeClass('glyphicon glyphicon-refresh glyphicon-refresh-animate');
 			}, 
 			dataType: "json" //request JSON
 		};
@@ -108,7 +108,7 @@ function deleteItem(id) {
 			},
 			success: function(data) {
 				//console.log(data);
-				$('#delete_response').text( data[0].MSG );
+				$('#items_delete_response').text( data[0].MSG );
 				location.reload();
 			},
 			complete: function(XMLHttpRequest) {
@@ -142,7 +142,7 @@ function getItems() {
 				//console.log(data);
 				var html_string = "";
 				if(data[0].CODE==500) {
-					$('#status').html(data[0].MSG);
+					$('#items_status').html(data[0].MSG);
 				}
 				else {
 					$.each(data, function(index1, val1) {
@@ -150,7 +150,7 @@ function getItems() {
 						html_string = html_string + templateGetInventory(val1);
 					});
 					
-					$('#get_items').html("<table class='table table-hover'>" +
+					$('#items_get_items').html("<table class='table table-hover'>" +
 											"<tbody><tr><th>Item</th><th>Price</th><th>Sold</th><th></th><th></th></tr>"+ html_string + "</tbody></table>");
 				}
 			},
